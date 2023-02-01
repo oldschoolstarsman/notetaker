@@ -5,9 +5,9 @@ import { Routes } from "../constants";
 
 function BottomNavigation() {
   const navigation = useNavigation();
+
   return (
     <AppBar
-      variant="bottom"
       color="white"
       leading={(props) => (
         <IconButton
@@ -17,6 +17,7 @@ function BottomNavigation() {
       )}
       trailing={(props) => (
         <IconButton
+          onPress={() => navigation.navigate(Routes.NotesList)}
           icon={(props) => <Icon name="magnify" {...props} />}
           {...props}
         />
