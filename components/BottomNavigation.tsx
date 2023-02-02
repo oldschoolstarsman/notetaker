@@ -8,7 +8,7 @@ function BottomNavigation() {
 
   return (
     <AppBar
-      color="white"
+      color="#fff"
       leading={(props) => (
         <IconButton
           icon={(props) => <Icon name="menu" {...props} />}
@@ -23,14 +23,7 @@ function BottomNavigation() {
         />
       )}
       style={{ position: "absolute", start: 0, end: 0, bottom: 0 }}
-    >
-      <FAB
-        onPress={() => navigation.navigate(Routes.NoteEditor)}
-        color="black"
-        icon={(props) => <Icon name="plus" {...props} />}
-        style={{ position: "absolute", top: -28, alignSelf: "center" }}
-      />
-    </AppBar>
+    />
   );
 }
 

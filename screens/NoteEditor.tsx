@@ -6,17 +6,28 @@ import { Routes } from "../constants";
 
 type NoteEditorProps = {
   navigation: any; // todo type
+  route: any; // todo type
 };
 
-const NoteEditor: React.FC<NoteEditorProps> = ({ navigation }) => {
-  const [title, setTitle] = useState("");
-  const [note, setNote] = useState("");
+const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
+  const isNewNote = route.params === undefined;
+  const [title, setTitle] = useState(isNewNote ? "" : route.params.title);
+  const [note, setNote] = useState(isNewNote ? "" : route.params.note);
   const isNoteComplete = !!note && !!title;
-
-  const { addNote } = useContext(NotesContext);
+  const { addNote, editNote, deleteNote } = useContext(NotesContext);
 
   const handleSaveNote = () => {
-    addNote({ title, note });
+    if (isNewNote) {
+      addNote({ title, note, id: Math.floor(Math.random() * 10000) });
+    } else {
+      const saveNote = { title, note, id: route.params.id };
+      editNote(saveNote);
+    }
+    navigation.navigate(Routes.NotesList);
+  };
+
+  const handleDelete = () => {
+    deleteNote(route.params.id);
     navigation.navigate(Routes.NotesList);
   };
 
@@ -41,10 +52,20 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation }) => {
         />
         <Button
           color="black"
+          disableElevation
           disabled={!isNoteComplete}
-          title="save"
+          title={isNewNote ? "save" : "edit"}
           onPress={handleSaveNote}
         />
+        {!isNewNote && (
+          <Button
+            color="red"
+            disableElevation
+            disabled={!isNoteComplete}
+            title={"delete"}
+            onPress={handleDelete}
+          />
+        )}
       </Stack>
     </View>
   );
