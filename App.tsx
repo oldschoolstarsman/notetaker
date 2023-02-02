@@ -5,6 +5,7 @@ import NotesList from "./screens/NotesList";
 import NoteEditor from "./screens/NoteEditor";
 import { Routes } from "./constants";
 import NotesContextProvider from "./store/userNotes-context";
+import { StatusBar } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,9 +13,17 @@ export default function App() {
   return (
     <>
       <NotesContextProvider>
+        <StatusBar
+          animated
+          barStyle="light-content"
+          showHideTransition="fade"
+        />
         <NavigationContainer>
           <Stack.Navigator
-            screenOptions={{ statusBarColor: "black" }}
+            screenOptions={{
+              statusBarColor: "black",
+              contentStyle: { backgroundColor: "#fff" },
+            }}
             initialRouteName={Routes.NotesList}
           >
             <Stack.Screen
@@ -22,7 +31,11 @@ export default function App() {
               name={Routes.NotesList}
               component={NotesList}
             />
-            <Stack.Screen name={Routes.NoteEditor} component={NoteEditor} />
+            <Stack.Screen
+              options={{ title: "All notes" }}
+              name={Routes.NoteEditor}
+              component={NoteEditor}
+            />
           </Stack.Navigator>
           <BottomNavigation />
         </NavigationContainer>

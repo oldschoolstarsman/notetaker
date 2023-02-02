@@ -1,22 +1,43 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { FlatList, View, Image, StyleSheet } from "react-native";
 import {
   Pressable,
-  HStack,
   Text,
-  Box,
   Flex,
   TextInput,
+  Button,
 } from "@react-native-material/core";
 import { NotesContext } from "../store/userNotes-context";
+import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import { Routes } from "../constants";
 
-function NotesList({ route }) {
+function NotesList({ route, navigation }) {
   const { notes } = useContext(NotesContext);
+  const [searchInput, setSearchInput] = useState("");
+  const filteredNotes =
+    searchInput !== ""
+      ? notes.filter((item) => {
+          return (
+            item.note.toLowerCase().includes(searchInput.toLowerCase()) ||
+            item.title.toLowerCase().includes(searchInput.toLowerCase())
+          );
+        })
+      : notes;
+
+  function handleOpenNote(id, title, note) {
+    navigation.navigate(Routes.NoteEditor, { id, title, note });
+  }
+
   function renderItem({ item }) {
     return (
-      <Pressable style={styles.tile}>
+      <Pressable
+        style={styles.tile}
+        onPress={() => handleOpenNote(item.id, item.title, item.note)}
+      >
         <View>
-          <Text variant="h6">{item.title}</Text>
+          <Text style={{ marginBottom: 4 }} variant="h6">
+            {item.title}
+          </Text>
           <Text variant="body2">{item.note}</Text>
         </View>
       </Pressable>
@@ -29,28 +50,41 @@ function NotesList({ route }) {
         <Text style={{ marginVertical: 15 }} variant="h5">
           You don't have any notes
         </Text>
-        <Image
-          // style={styles.tinyLogo}
-          source={require("../assets/empty-list.png")}
+        <Image source={require("../assets/empty-list.png")} />
+        <Button
+          disableElevation
+          style={{ marginVertical: 25 }}
+          leading={(props) => <Icon name="plus" {...props} />}
+          color="black"
+          title="Add note"
+          onPress={() => navigation.navigate(Routes.NoteEditor)}
         />
       </Flex>
     );
   }
   return (
     <View style={styles.container}>
-      {/* {route.params?.isSearch && (
-        <TextInput
-          color="black"
-          placeholder="search notes"
-          variant="outlined"
-          // onChangeText={(text) => setNote(text)}
-        />
-      )} */}
+      <TextInput
+        color="black"
+        placeholder="search notes"
+        variant="outlined"
+        value={searchInput}
+        onChangeText={setSearchInput}
+      />
       <FlatList
+        showsVerticalScrollIndicator={false}
         numColumns={2}
         horizontal={false}
         renderItem={renderItem}
-        data={notes}
+        data={filteredNotes}
+      />
+      <Button
+        disableElevation
+        style={{ marginVertical: 32, width: 150, alignSelf: "center" }}
+        leading={(props) => <Icon name="plus" {...props} />}
+        color="black"
+        title="Add note"
+        onPress={() => navigation.navigate(Routes.NoteEditor)}
       />
     </View>
   );
@@ -59,15 +93,18 @@ function NotesList({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
+    paddingVertical: 24,
+    paddingHorizontal: 12,
+    backgroundColor: "#FFFFFF",
   },
   tile: {
-    flex: 1,
-    padding: 4,
-    margin: 3,
+    padding: 6,
+    margin: 4,
     width: 200,
     height: 230,
-    backgroundColor: "#ccc",
+    backgroundColor: "#F6F6F6",
+    overflow: "hidden",
+    borderRadius: 8,
   },
 });
 
