@@ -6,15 +6,18 @@ import {
   Flex,
   TextInput,
   Button,
+  IconButton,
+  FAB,
 } from "@react-native-material/core";
 import { NotesContext } from "../store/userNotes-context";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { Routes } from "../constants";
 
 function NotesList({ route, navigation }) {
-  const { notes } = useContext(NotesContext);
+  const { notes, isFetching } = useContext(NotesContext);
   const [searchInput, setSearchInput] = useState("");
   const userSearching = searchInput !== "";
+  const isFavorite = false;
   const filteredNotes = userSearching
     ? notes.filter((item) => {
         return (
@@ -44,27 +47,43 @@ function NotesList({ route, navigation }) {
             {item.title}
           </Text>
           <Text variant="body2">{item.note}</Text>
+          <IconButton
+            style={{ position: "absolute", top: 0, right: 0 }}
+            icon={(props) => (
+              <Icon name={isFavorite ? "heart" : "heart-outline"} {...props} />
+            )}
+          />
         </View>
       </Pressable>
     );
   }
 
+  if (isFetching) {
+    return <Text>fetching data...</Text>;
+  }
+
   if (notes.length === 0) {
     return (
-      <Flex fill center>
-        <Text style={{ marginVertical: 15 }} variant="h5">
-          You don't have any notes
-        </Text>
-        <Image source={require("../assets/empty-list.png")} />
-        <Button
-          disableElevation
-          style={{ marginVertical: 25 }}
-          leading={(props) => <Icon name="plus" {...props} />}
-          color="black"
-          title="Add note"
-          onPress={() => navigation.navigate(Routes.NoteEditor)}
-        />
-      </Flex>
+      <View style={styles.container}>
+        <Flex fill center>
+          <Text style={{ marginVertical: 15 }} variant="h5">
+            You don't have any notes
+          </Text>
+          <Image source={require("../assets/empty-list.png")} />
+        </Flex>
+        {renderFabButton()}
+      </View>
+    );
+  }
+
+  function renderFabButton() {
+    return (
+      <FAB
+        style={{ alignSelf: "flex-end" }}
+        icon={(props) => <Icon name="plus" {...props} />}
+        color="black"
+        onPress={() => navigation.navigate(Routes.NoteEditor)}
+      />
     );
   }
 
@@ -91,16 +110,7 @@ function NotesList({ route, navigation }) {
         renderItem={renderItem}
         data={filteredNotes}
       />
-      {!userSearching && (
-        <Button
-          disableElevation
-          style={{ marginVertical: 32, width: 150, alignSelf: "center" }}
-          leading={(props) => <Icon name="plus" {...props} />}
-          color="black"
-          title="Add note"
-          onPress={handleCreateNewNote}
-        />
-      )}
+      {!userSearching && renderFabButton()}
     </View>
   );
 }
@@ -113,9 +123,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   tile: {
+    position: "relative",
     padding: 6,
     margin: 4,
-    width: 200,
+    flex: 1,
     height: 230,
     backgroundColor: "#F6F6F6",
     overflow: "hidden",

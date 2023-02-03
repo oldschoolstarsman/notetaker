@@ -1,4 +1,4 @@
-import { AppBar, IconButton, FAB } from "@react-native-material/core";
+import { AppBar, IconButton, FAB, Avatar } from "@react-native-material/core";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { Routes } from "../constants";
@@ -17,8 +17,8 @@ function BottomNavigation() {
       )}
       trailing={(props) => (
         <IconButton
-          onPress={() => navigation.navigate(Routes.NotesList)}
-          icon={(props) => <Icon name="magnify" {...props} />}
+          icon={<Avatar color="#257e81" label="Yaman KATBY" size={28} />}
+          onPress={() => null}
           {...props}
         />
       )}

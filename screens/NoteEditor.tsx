@@ -3,6 +3,11 @@ import { useContext, useState } from "react";
 import { Stack, TextInput, Button } from "@react-native-material/core";
 import { NotesContext } from "../store/userNotes-context";
 import { Routes } from "../constants";
+import {
+  storeNote,
+  updateNote,
+  deleteNote as removeNote,
+} from "../api/notesApi";
 
 type NoteEditorProps = {
   navigation: any; // todo type
@@ -16,18 +21,27 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
   const isNoteComplete = !!note && !!title;
   const { addNote, editNote, deleteNote } = useContext(NotesContext);
 
-  const handleSaveNote = () => {
-    if (isNewNote) {
-      addNote({ title, note, id: Math.floor(Math.random() * 10000) });
-    } else {
-      const saveNote = { title, note, id: route.params.id };
-      editNote(saveNote);
+  const handleSaveNote = async () => {
+    try {
+      if (isNewNote) {
+        const noteData = { title, note };
+        const id = await storeNote(noteData);
+        addNote({ id, ...noteData });
+      } else {
+        const noteId = route.params.id;
+        editNote({ id: noteId, title, note });
+        updateNote({ id: noteId, title, note });
+      }
+    } catch (error) {
+      console.log(error);
     }
+
     navigation.navigate(Routes.NotesList);
   };
 
   const handleDelete = () => {
     deleteNote(route.params.id);
+    removeNote(route.params.id);
     navigation.navigate(Routes.NotesList);
   };
 
@@ -59,9 +73,8 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
         />
         {!isNewNote && (
           <Button
-            color="red"
+            color="#ae2012"
             disableElevation
-            disabled={!isNoteComplete}
             title={"delete"}
             onPress={handleDelete}
           />

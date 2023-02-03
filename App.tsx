@@ -37,7 +37,6 @@ export default function App() {
               component={NoteEditor}
             />
           </Stack.Navigator>
-          <BottomNavigation />
         </NavigationContainer>
       </NotesContextProvider>
     </>
