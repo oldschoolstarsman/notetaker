@@ -14,18 +14,23 @@ import { Routes } from "../constants";
 function NotesList({ route, navigation }) {
   const { notes } = useContext(NotesContext);
   const [searchInput, setSearchInput] = useState("");
-  const filteredNotes =
-    searchInput !== ""
-      ? notes.filter((item) => {
-          return (
-            item.note.toLowerCase().includes(searchInput.toLowerCase()) ||
-            item.title.toLowerCase().includes(searchInput.toLowerCase())
-          );
-        })
-      : notes;
+  const userSearching = searchInput !== "";
+  const filteredNotes = userSearching
+    ? notes.filter((item) => {
+        return (
+          item.note.toLowerCase().includes(searchInput.toLowerCase()) ||
+          item.title.toLowerCase().includes(searchInput.toLowerCase())
+        );
+      })
+    : notes;
 
   function handleOpenNote(id, title, note) {
     navigation.navigate(Routes.NoteEditor, { id, title, note });
+  }
+
+  function handleCreateNewNote() {
+    setSearchInput("");
+    navigation.navigate(Routes.NoteEditor);
   }
 
   function renderItem({ item }) {
@@ -62,9 +67,17 @@ function NotesList({ route, navigation }) {
       </Flex>
     );
   }
+
   return (
     <View style={styles.container}>
       <TextInput
+        trailing={(props) => (
+          <Icon
+            onPress={() => setSearchInput("")}
+            name={userSearching ? "arrow-left" : "magnify"}
+            {...props}
+          />
+        )}
         color="black"
         placeholder="search notes"
         variant="outlined"
@@ -78,14 +91,16 @@ function NotesList({ route, navigation }) {
         renderItem={renderItem}
         data={filteredNotes}
       />
-      <Button
-        disableElevation
-        style={{ marginVertical: 32, width: 150, alignSelf: "center" }}
-        leading={(props) => <Icon name="plus" {...props} />}
-        color="black"
-        title="Add note"
-        onPress={() => navigation.navigate(Routes.NoteEditor)}
-      />
+      {!userSearching && (
+        <Button
+          disableElevation
+          style={{ marginVertical: 32, width: 150, alignSelf: "center" }}
+          leading={(props) => <Icon name="plus" {...props} />}
+          color="black"
+          title="Add note"
+          onPress={handleCreateNewNote}
+        />
+      )}
     </View>
   );
 }
