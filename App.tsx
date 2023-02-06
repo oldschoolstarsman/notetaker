@@ -1,9 +1,8 @@
-import BottomNavigation from "./components/BottomNavigation";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import NotesList from "./screens/NotesList";
 import NoteEditor from "./screens/NoteEditor";
-import { Routes } from "./constants";
+import { GlobalStyles, Routes } from "./constants";
 import NotesContextProvider from "./store/userNotes-context";
 import { StatusBar } from "react-native";
 
@@ -22,7 +21,8 @@ export default function App() {
           <Stack.Navigator
             screenOptions={{
               statusBarColor: "black",
-              contentStyle: { backgroundColor: "#fff" },
+              contentStyle: { backgroundColor: GlobalStyles.colors.white },
+              headerShadowVisible: false,
             }}
             initialRouteName={Routes.NotesList}
           >

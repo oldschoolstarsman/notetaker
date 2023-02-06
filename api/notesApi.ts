@@ -4,7 +4,6 @@ const BACKEND_URL =
   "https://mynotesrn-default-rtdb.europe-west1.firebasedatabase.app/";
 
 export async function storeNote(noteData) {
-  console.log("here");
   const response = await axios.post(BACKEND_URL + "/notes.json", noteData);
   const id = response.data.name;
   return id;

@@ -1,8 +1,8 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { useContext, useState } from "react";
-import { Stack, TextInput, Button } from "@react-native-material/core";
+import { Stack, TextInput } from "@react-native-material/core";
 import { NotesContext } from "../store/userNotes-context";
-import { Routes } from "../constants";
+import { GlobalStyles, Routes } from "../constants";
 import {
   storeNote,
   updateNote,
@@ -64,20 +64,32 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
           variant="outlined"
           onChangeText={(text) => setNote(text)}
         />
-        <Button
-          color="black"
-          disableElevation
+        <TouchableOpacity
           disabled={!isNoteComplete}
-          title={isNewNote ? "save" : "edit"}
+          style={[
+            styles.button,
+            {
+              backgroundColor: isNoteComplete
+                ? GlobalStyles.colors.black
+                : GlobalStyles.colors.lightGrey,
+            },
+          ]}
           onPress={handleSaveNote}
-        />
+        >
+          <Text style={styles.buttonTextColor}>
+            {isNewNote ? "save" : "edit"}
+          </Text>
+        </TouchableOpacity>
         {!isNewNote && (
-          <Button
-            color="#ae2012"
-            disableElevation
-            title={"delete"}
+          <TouchableOpacity
+            style={[
+              styles.button,
+              { backgroundColor: GlobalStyles.colors.red },
+            ]}
             onPress={handleDelete}
-          />
+          >
+            <Text style={styles.buttonTextColor}>{"delete"}</Text>
+          </TouchableOpacity>
         )}
       </Stack>
     </View>
@@ -87,11 +99,21 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
   },
   noteDetails: {
     alignItems: "flex-start",
     height: 500,
+  },
+  button: {
+    padding: 12,
+    borderRadius: 4,
+  },
+  buttonTextColor: {
+    textAlign: "center",
+    textTransform: "uppercase",
+    color: "white",
   },
 });
 

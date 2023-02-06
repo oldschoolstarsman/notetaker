@@ -1,23 +1,26 @@
 import { useContext, useState } from "react";
-import { FlatList, View, Image, StyleSheet } from "react-native";
 import {
-  Pressable,
-  Text,
-  Flex,
-  TextInput,
-  Button,
-  IconButton,
-  FAB,
-} from "@react-native-material/core";
+  FlatList,
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import { Text, Flex, AppBar } from "@react-native-material/core";
 import { NotesContext } from "../store/userNotes-context";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { Routes } from "../constants";
+import SearchBar from "react-native-dynamic-search-bar";
+import FabButton from "../components/FabButton";
+import { GlobalStyles } from "../constants";
 
-function NotesList({ route, navigation }) {
+function NotesList({ navigation }) {
+  const { colors } = GlobalStyles;
   const { notes, isFetching } = useContext(NotesContext);
   const [searchInput, setSearchInput] = useState("");
+  const [openSearch, setSearchOpen] = useState(false);
   const userSearching = searchInput !== "";
-  const isFavorite = false;
+  const isFavorite = true;
   const filteredNotes = userSearching
     ? notes.filter((item) => {
         return (
@@ -38,23 +41,23 @@ function NotesList({ route, navigation }) {
 
   function renderItem({ item }) {
     return (
-      <Pressable
+      <TouchableOpacity
+        onLongPress={() => console.log("toto")}
         style={styles.tile}
         onPress={() => handleOpenNote(item.id, item.title, item.note)}
       >
-        <View>
-          <Text style={{ marginBottom: 4 }} variant="h6">
-            {item.title}
-          </Text>
-          <Text variant="body2">{item.note}</Text>
-          <IconButton
-            style={{ position: "absolute", top: 0, right: 0 }}
-            icon={(props) => (
-              <Icon name={isFavorite ? "heart" : "heart-outline"} {...props} />
-            )}
-          />
+        <View style={styles.favoriteBtn}>
+          <Icon size={18} name={isFavorite ? "heart" : undefined} />
         </View>
-      </Pressable>
+        <Text
+          numberOfLines={1}
+          style={{ marginBottom: 4, width: "90%" }}
+          variant="h6"
+        >
+          {item.title}
+        </Text>
+        <Text variant="body2">{item.note}</Text>
+      </TouchableOpacity>
     );
   }
 
@@ -76,61 +79,92 @@ function NotesList({ route, navigation }) {
     );
   }
 
+  function renderSearchNoMatch() {
+    return (
+      <View style={styles.container}>
+        <Text>no notes found..</Text>
+      </View>
+    );
+  }
+
   function renderFabButton() {
     return (
-      <FAB
-        style={{ alignSelf: "flex-end" }}
-        icon={(props) => <Icon name="plus" {...props} />}
-        color="black"
-        onPress={() => navigation.navigate(Routes.NoteEditor)}
+      <FabButton
+        position={{ bottom: 24, right: 24 }}
+        iconName="plus"
+        action={handleCreateNewNote}
       />
     );
   }
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        trailing={(props) => (
-          <Icon
-            onPress={() => setSearchInput("")}
-            name={userSearching ? "arrow-left" : "magnify"}
-            {...props}
-          />
-        )}
-        color="black"
-        placeholder="search notes"
-        variant="outlined"
-        value={searchInput}
-        onChangeText={setSearchInput}
-      />
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        numColumns={2}
-        horizontal={false}
-        renderItem={renderItem}
-        data={filteredNotes}
-      />
-      {!userSearching && renderFabButton()}
-    </View>
+    <>
+      <View style={styles.container}>
+        <AppBar
+          color="white"
+          elevation={0}
+          trailing={(props) =>
+            !openSearch ? (
+              <Icon
+                onPress={() => setSearchOpen(true)}
+                size={22}
+                name="magnify"
+                {...props}
+              />
+            ) : (
+              <SearchBar
+                placeholder="Search notes ..."
+                onChangeText={setSearchInput}
+                onClearPress={() => setSearchInput("")}
+                onSearchPress={() => {
+                  setSearchOpen(false);
+                  setSearchInput("");
+                }}
+                searchIconComponent={<Icon size={22} name="magnify" />}
+                style={{
+                  backgroundColor: colors.lightGrey,
+                  width: "100%",
+                }}
+              />
+            )
+          }
+        />
+        {filteredNotes.length === 0 && renderSearchNoMatch()}
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          horizontal={false}
+          renderItem={renderItem}
+          data={filteredNotes}
+        />
+        {renderFabButton()}
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 24,
+    paddingTop: 10,
     paddingHorizontal: 12,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: GlobalStyles.colors.white,
   },
   tile: {
     position: "relative",
-    padding: 6,
+    paddingVertical: 10,
+    paddingHorizontal: 6,
     margin: 4,
     flex: 1,
     height: 230,
-    backgroundColor: "#F6F6F6",
+    backgroundColor: GlobalStyles.colors.lightGrey,
     overflow: "hidden",
     borderRadius: 8,
+  },
+  favoriteBtn: {
+    position: "absolute",
+    top: 10,
+    right: 8,
   },
 });
 
