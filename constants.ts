@@ -9,6 +9,7 @@ const GlobalStyles = {
     lightGrey: "#f6f6f6",
     red: "#ae2012",
     black: "#000",
+    accent: "#257e81",
   },
 };
 

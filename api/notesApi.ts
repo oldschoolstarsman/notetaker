@@ -10,8 +10,13 @@ export async function storeNote(noteData) {
 }
 
 export function updateNote(noteData) {
-  const { note, title } = noteData;
-  return axios.put(BACKEND_URL + `/notes/${noteData.id}.json`, { note, title });
+  console.log("here", noteData);
+  const { note, title, isFavorite } = noteData;
+  return axios.put(BACKEND_URL + `/notes/${noteData.id}.json`, {
+    note,
+    title,
+    isFavorite,
+  });
 }
 
 export async function getNotes() {

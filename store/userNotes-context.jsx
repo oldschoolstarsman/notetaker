@@ -7,6 +7,7 @@ export const NotesContext = createContext({
   editNote: (note) => {},
   deleteNote: (note) => {},
   isFetching: false,
+  addToFavorite: (id) => {},
 });
 
 function NotesContextProvider({ children }) {
@@ -17,6 +18,7 @@ function NotesContextProvider({ children }) {
     setIsFetchingNotes(true);
     async function fetchNotes() {
       const data = await getNotes();
+      console.table(data);
       setNotes(data);
       setIsFetchingNotes(false);
     }
@@ -44,12 +46,27 @@ function NotesContextProvider({ children }) {
     );
   }
 
+  function addToFavorite(id) {
+    const newList = notes.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          isFavorite: true,
+        };
+      } else {
+        return item;
+      }
+    });
+    setNotes(newList);
+  }
+
   const value = {
     notes,
     addNote,
     deleteNote,
     editNote,
     isFetching: isFetchingNotes,
+    addToFavorite,
   };
 
   return (

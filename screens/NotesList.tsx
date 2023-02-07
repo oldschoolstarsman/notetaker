@@ -13,6 +13,7 @@ import { Routes } from "../constants";
 import SearchBar from "react-native-dynamic-search-bar";
 import FabButton from "../components/FabButton";
 import { GlobalStyles } from "../constants";
+import { SheetManager } from "react-native-actions-sheet";
 
 function NotesList({ navigation }) {
   const { colors } = GlobalStyles;
@@ -20,7 +21,6 @@ function NotesList({ navigation }) {
   const [searchInput, setSearchInput] = useState("");
   const [openSearch, setSearchOpen] = useState(false);
   const userSearching = searchInput !== "";
-  const isFavorite = true;
   const filteredNotes = userSearching
     ? notes.filter((item) => {
         return (
@@ -32,22 +32,37 @@ function NotesList({ navigation }) {
 
   function handleOpenNote(id, title, note) {
     navigation.navigate(Routes.NoteEditor, { id, title, note });
+    closeBottomSheetDrawer();
+    setSearchInput("");
   }
 
   function handleCreateNewNote() {
-    setSearchInput("");
     navigation.navigate(Routes.NoteEditor);
+    setSearchInput("");
+  }
+
+  function closeBottomSheetDrawer() {
+    SheetManager.hide("note-actions-sheet");
+  }
+  function openNoteActionsBottomDrawer(item) {
+    SheetManager.show("note-actions-sheet", { payload: { item } });
   }
 
   function renderItem({ item }) {
+    const isFavorite = item.isFavorite;
+
     return (
       <TouchableOpacity
-        onLongPress={() => console.log("toto")}
+        onLongPress={() => openNoteActionsBottomDrawer(item)}
         style={styles.tile}
         onPress={() => handleOpenNote(item.id, item.title, item.note)}
       >
         <View style={styles.favoriteBtn}>
-          <Icon size={18} name={isFavorite ? "heart" : undefined} />
+          <Icon
+            color={GlobalStyles.colors.accent}
+            size={18}
+            name={isFavorite ? "star" : undefined}
+          />
         </View>
         <Text
           numberOfLines={1}
@@ -98,48 +113,46 @@ function NotesList({ navigation }) {
   }
 
   return (
-    <>
-      <View style={styles.container}>
-        <AppBar
-          color="white"
-          elevation={0}
-          trailing={(props) =>
-            !openSearch ? (
-              <Icon
-                onPress={() => setSearchOpen(true)}
-                size={22}
-                name="magnify"
-                {...props}
-              />
-            ) : (
-              <SearchBar
-                placeholder="Search notes ..."
-                onChangeText={setSearchInput}
-                onClearPress={() => setSearchInput("")}
-                onSearchPress={() => {
-                  setSearchOpen(false);
-                  setSearchInput("");
-                }}
-                searchIconComponent={<Icon size={22} name="magnify" />}
-                style={{
-                  backgroundColor: colors.lightGrey,
-                  width: "100%",
-                }}
-              />
-            )
-          }
-        />
-        {filteredNotes.length === 0 && renderSearchNoMatch()}
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          numColumns={2}
-          horizontal={false}
-          renderItem={renderItem}
-          data={filteredNotes}
-        />
-        {renderFabButton()}
-      </View>
-    </>
+    <View style={styles.container}>
+      <AppBar
+        color="white"
+        elevation={0}
+        trailing={(props) =>
+          !openSearch ? (
+            <Icon
+              onPress={() => setSearchOpen(true)}
+              size={22}
+              name="magnify"
+              {...props}
+            />
+          ) : (
+            <SearchBar
+              placeholder="Search notes ..."
+              onChangeText={setSearchInput}
+              onClearPress={() => setSearchInput("")}
+              onSearchPress={() => {
+                setSearchOpen(false);
+                setSearchInput("");
+              }}
+              searchIconComponent={<Icon size={22} name="magnify" />}
+              style={{
+                backgroundColor: colors.lightGrey,
+                width: "100%",
+              }}
+            />
+          )
+        }
+      />
+      {filteredNotes.length === 0 && renderSearchNoMatch()}
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        numColumns={2}
+        horizontal={false}
+        renderItem={renderItem}
+        data={filteredNotes}
+      />
+      {renderFabButton()}
+    </View>
   );
 }
 

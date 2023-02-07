@@ -1,13 +1,9 @@
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { useContext, useState } from "react";
-import { Stack, TextInput } from "@react-native-material/core";
+import { HStack, Stack, TextInput, Text } from "@react-native-material/core";
 import { NotesContext } from "../store/userNotes-context";
 import { GlobalStyles, Routes } from "../constants";
-import {
-  storeNote,
-  updateNote,
-  deleteNote as removeNote,
-} from "../api/notesApi";
+import { storeNote, updateNote } from "../api/notesApi";
 
 type NoteEditorProps = {
   navigation: any; // todo type
@@ -19,7 +15,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
   const [title, setTitle] = useState(isNewNote ? "" : route.params.title);
   const [note, setNote] = useState(isNewNote ? "" : route.params.note);
   const isNoteComplete = !!note && !!title;
-  const { addNote, editNote, deleteNote } = useContext(NotesContext);
+  const { addNote, editNote } = useContext(NotesContext);
 
   const handleSaveNote = async () => {
     try {
@@ -39,9 +35,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
     navigation.navigate(Routes.NotesList);
   };
 
-  const handleDelete = () => {
-    deleteNote(route.params.id);
-    removeNote(route.params.id);
+  const handleCancel = () => {
     navigation.navigate(Routes.NotesList);
   };
 
@@ -57,40 +51,40 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
         />
         <TextInput
           color="black"
-          placeholder="what I want save"
+          placeholder="what I want to save"
           inputContainerStyle={styles.noteDetails}
           value={note}
           multiline
           variant="outlined"
           onChangeText={(text) => setNote(text)}
         />
-        <TouchableOpacity
-          disabled={!isNoteComplete}
-          style={[
-            styles.button,
-            {
-              backgroundColor: isNoteComplete
-                ? GlobalStyles.colors.black
-                : GlobalStyles.colors.lightGrey,
-            },
-          ]}
-          onPress={handleSaveNote}
-        >
-          <Text style={styles.buttonTextColor}>
-            {isNewNote ? "save" : "edit"}
-          </Text>
-        </TouchableOpacity>
-        {!isNewNote && (
+        <HStack spacing={6} justify="center">
           <TouchableOpacity
-            style={[
-              styles.button,
-              { backgroundColor: GlobalStyles.colors.red },
-            ]}
-            onPress={handleDelete}
+            style={{ flex: 1 }}
+            disabled={!isNoteComplete}
+            onPress={handleSaveNote}
           >
-            <Text style={styles.buttonTextColor}>{"delete"}</Text>
+            <Text
+              style={[
+                styles.buttonText,
+                {
+                  color: isNoteComplete ? GlobalStyles.colors.black : "grey",
+                },
+              ]}
+            >
+              {"Save"}
+            </Text>
           </TouchableOpacity>
-        )}
+          {!isNewNote && (
+            <TouchableOpacity style={{ flex: 1 }} onPress={handleCancel}>
+              <Text
+                style={[styles.buttonText, { color: GlobalStyles.colors.red }]}
+              >
+                Cancel
+              </Text>
+            </TouchableOpacity>
+          )}
+        </HStack>
       </Stack>
     </View>
   );
@@ -110,10 +104,9 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 4,
   },
-  buttonTextColor: {
+  buttonText: {
+    fontWeight: "600",
     textAlign: "center",
-    textTransform: "uppercase",
-    color: "white",
   },
 });
 
