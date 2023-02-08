@@ -14,9 +14,11 @@ import SearchBar from "react-native-dynamic-search-bar";
 import FabButton from "../components/FabButton";
 import { GlobalStyles } from "../constants";
 import { SheetManager } from "react-native-actions-sheet";
+import { useAppSelector } from "../store";
 
 function NotesList({ navigation }) {
   const { colors } = GlobalStyles;
+  const storeNotes = useAppSelector((state) => state);
   const { notes, isFetching } = useContext(NotesContext);
   const [searchInput, setSearchInput] = useState("");
   const [openSearch, setSearchOpen] = useState(false);

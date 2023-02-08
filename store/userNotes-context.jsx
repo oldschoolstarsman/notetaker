@@ -18,7 +18,6 @@ function NotesContextProvider({ children }) {
     setIsFetchingNotes(true);
     async function fetchNotes() {
       const data = await getNotes();
-      console.table(data);
       setNotes(data);
       setIsFetchingNotes(false);
     }
