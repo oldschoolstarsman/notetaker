@@ -59,22 +59,6 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
           onChangeText={(text) => setNote(text)}
         />
         <HStack spacing={6} justify="center">
-          <TouchableOpacity
-            style={{ flex: 1 }}
-            disabled={!isNoteComplete}
-            onPress={handleSaveNote}
-          >
-            <Text
-              style={[
-                styles.buttonText,
-                {
-                  color: isNoteComplete ? GlobalStyles.colors.black : "grey",
-                },
-              ]}
-            >
-              {"Save"}
-            </Text>
-          </TouchableOpacity>
           {!isNewNote && (
             <TouchableOpacity style={{ flex: 1 }} onPress={handleCancel}>
               <Text
@@ -84,6 +68,20 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
               </Text>
             </TouchableOpacity>
           )}
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            disabled={!isNoteComplete}
+            onPress={handleSaveNote}
+          >
+            <Text
+              style={[
+                styles.buttonText,
+                { color: isNoteComplete ? GlobalStyles.colors.black : "grey" },
+              ]}
+            >
+              {"Save"}
+            </Text>
+          </TouchableOpacity>
         </HStack>
       </Stack>
     </View>

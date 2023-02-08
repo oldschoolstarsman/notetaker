@@ -27,8 +27,8 @@ function NoteActionsSheet(props: SheetProps) {
     closeDrawer();
   }
 
-  function handleAddToFavorite() {
-    updateNote({ ...item, isFavorite: true });
+  function handleToggleFavorite() {
+    updateNote({ ...item, isFavorite: !item.favorite });
     addToFavorite(item.id);
     closeDrawer();
   }
@@ -44,7 +44,7 @@ function NoteActionsSheet(props: SheetProps) {
     >
       <HStack
         style={{
-          height: 75,
+          height: 85,
           justifyContent: "space-around",
           alignItems: "center",
         }}
@@ -54,16 +54,16 @@ function NoteActionsSheet(props: SheetProps) {
             onPress={handleDeleteNote}
             color={GlobalStyles.colors.red}
             size={28}
-            name="bitcoin"
+            name="delete-outline"
           />
           <Text variant="caption">Delete</Text>
         </VStack>
         <VStack center>
           <Icon
-            onPress={handleAddToFavorite}
+            onPress={handleToggleFavorite}
             color={GlobalStyles.colors.accent}
             size={28}
-            name="star"
+            name="star-outline"
           />
           <Text variant="caption">Favourite</Text>
         </VStack>
@@ -75,7 +75,7 @@ function NoteActionsSheet(props: SheetProps) {
             }}
             color={GlobalStyles.colors.black}
             size={28}
-            name="note-edit-outline"
+            name="pencil-outline"
           />
           <Text variant="caption">Edit</Text>
         </VStack>

@@ -121,7 +121,6 @@ function NotesList({ navigation }) {
           !openSearch ? (
             <Icon
               onPress={() => setSearchOpen(true)}
-              size={22}
               name="magnify"
               {...props}
             />
@@ -134,7 +133,7 @@ function NotesList({ navigation }) {
                 setSearchOpen(false);
                 setSearchInput("");
               }}
-              searchIconComponent={<Icon size={22} name="magnify" />}
+              searchIconComponent={<Icon size={24} name="magnify" />}
               style={{
                 backgroundColor: colors.lightGrey,
                 width: "100%",
