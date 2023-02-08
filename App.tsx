@@ -17,36 +17,36 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <NotesContextProvider>
-          <StatusBar
-            animated
-            barStyle="light-content"
-            showHideTransition="fade"
-          />
-          <NavigationContainer>
-            <SheetProvider>
-              <Stack.Navigator
-                screenOptions={{
-                  statusBarColor: "black",
-                  contentStyle: { backgroundColor: GlobalStyles.colors.white },
-                  headerShadowVisible: false,
-                }}
-                initialRouteName={Routes.NotesList}
-              >
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name={Routes.NotesList}
-                  component={NotesList}
-                />
-                <Stack.Screen
-                  options={{ title: "All notes" }}
-                  name={Routes.NoteEditor}
-                  component={NoteEditor}
-                />
-              </Stack.Navigator>
-            </SheetProvider>
-          </NavigationContainer>
-        </NotesContextProvider>
+        {/* <NotesContextProvider> */}
+        <StatusBar
+          animated
+          barStyle="light-content"
+          showHideTransition="fade"
+        />
+        <NavigationContainer>
+          <SheetProvider>
+            <Stack.Navigator
+              screenOptions={{
+                statusBarColor: "black",
+                contentStyle: { backgroundColor: GlobalStyles.colors.white },
+                headerShadowVisible: false,
+              }}
+              initialRouteName={Routes.NotesList}
+            >
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name={Routes.NotesList}
+                component={NotesList}
+              />
+              <Stack.Screen
+                options={{ title: "All notes" }}
+                name={Routes.NoteEditor}
+                component={NoteEditor}
+              />
+            </Stack.Navigator>
+          </SheetProvider>
+        </NavigationContainer>
+        {/* </NotesContextProvider> */}
       </PersistGate>
     </Provider>
   );

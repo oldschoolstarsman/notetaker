@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { fetchNotes } from "./notes-thunk";
 
 const initialState = {
-  notes: [{ new: 1 }],
+  isLoading: false,
+  notes: [],
 };
 export type NotesState = typeof initialState;
 
@@ -9,9 +11,19 @@ export const noteSlice = createSlice({
   name: "notes",
   initialState: initialState,
   reducers: {
-    setNotes(state: NotesState, action: PayloadAction<any>) {
-      console.log(state, action);
+    setNotes(state, { payload }) {
+      state.notes = [...state.notes, payload];
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchNotes.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchNotes.fulfilled, (state, action: PayloadAction<any>) => {
+        state.notes = action.payload;
+        state.isLoading = false;
+      });
   },
 });
 

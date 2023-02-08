@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   FlatList,
   View,
@@ -14,15 +14,22 @@ import SearchBar from "react-native-dynamic-search-bar";
 import FabButton from "../components/FabButton";
 import { GlobalStyles } from "../constants";
 import { SheetManager } from "react-native-actions-sheet";
-import { useAppSelector } from "../store";
+import { useAppDispatch, useAppSelector } from "../store";
+import { fetchNotes } from "../store/notes-thunk";
 
 function NotesList({ navigation }) {
   const { colors } = GlobalStyles;
-  const storeNotes = useAppSelector((state) => state);
-  const { notes, isFetching } = useContext(NotesContext);
+  const notes = useAppSelector((state) => state.notes);
+  const isLoading = useAppSelector((state) => state.isLoading);
   const [searchInput, setSearchInput] = useState("");
   const [openSearch, setSearchOpen] = useState(false);
   const userSearching = searchInput !== "";
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchNotes());
+  }, []);
+
   const filteredNotes = userSearching
     ? notes.filter((item) => {
         return (
@@ -78,7 +85,7 @@ function NotesList({ navigation }) {
     );
   }
 
-  if (isFetching) {
+  if (isLoading) {
     return <Text>fetching data...</Text>;
   }
 

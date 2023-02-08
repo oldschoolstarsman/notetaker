@@ -1,9 +1,23 @@
-import { configureStore } from "@reduxjs/toolkit";
+import {
+  AnyAction,
+  configureStore,
+  getDefaultMiddleware,
+  ThunkDispatch,
+} from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import notesReducer from "./notes-reducer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import logger from "redux-logger";
-import { persistStore, persistReducer } from "redux-persist";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+} from "redux-persist";
 
 const persistConfig = {
   key: "root",
@@ -12,13 +26,16 @@ const persistConfig = {
 };
 
 const middlewares = [logger];
-const enhancers = [...middlewares];
 
 const persistedReducer = persistReducer(persistConfig, notesReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: enhancers,
+  middleware: getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }).concat(middlewares),
 });
 export const persistor = persistStore(store);
 
@@ -26,5 +43,6 @@ export const persistor = persistStore(store);
 export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
+export type AppThunkDispatch = ThunkDispatch<RootState, any, AnyAction>;
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
