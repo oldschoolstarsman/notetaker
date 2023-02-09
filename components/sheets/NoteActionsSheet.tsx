@@ -7,29 +7,27 @@ import ActionSheet, {
 } from "react-native-actions-sheet";
 import { GlobalStyles, Routes } from "../../constants";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import { NotesContext } from "../../store/userNotes-context";
 import { useNavigation } from "@react-navigation/native";
-import { deleteNote as removeNote, updateNote } from "../../api/notesApi";
+import { removeNote, updateNote } from "../../store/notes-thunks";
+import { useAppDispatch } from "../../store";
 
-function NoteActionsSheet(props: SheetProps) {
+function NoteActionsSheet(props: SheetProps<{ item: NoteDTO }>) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
-  const { deleteNote, addToFavorite } = useContext(NotesContext);
   const item = props.payload?.item;
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
 
   function closeDrawer() {
     SheetManager.hide(props.sheetId);
   }
 
   function handleDeleteNote() {
-    deleteNote(item.id);
-    removeNote(item.id);
+    dispatch(removeNote(item.id));
     closeDrawer();
   }
 
   function handleToggleFavorite() {
-    updateNote({ ...item, isFavorite: !item.favorite });
-    addToFavorite(item.id);
+    dispatch(updateNote({ ...item, isFavorite: !item.isFavorite }));
     closeDrawer();
   }
 

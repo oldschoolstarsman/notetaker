@@ -7,9 +7,10 @@ import NotesContextProvider from "./store/userNotes-context";
 import { StatusBar } from "react-native";
 import { SheetProvider } from "react-native-actions-sheet";
 import "./components/sheets/sheets";
-import { persistor, store } from "./store";
+import { persistor, store, useAppSelector } from "./store";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import { useEffect } from "react";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,7 +18,6 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        {/* <NotesContextProvider> */}
         <StatusBar
           animated
           barStyle="light-content"
@@ -46,7 +46,6 @@ export default function App() {
             </Stack.Navigator>
           </SheetProvider>
         </NavigationContainer>
-        {/* </NotesContextProvider> */}
       </PersistGate>
     </Provider>
   );

@@ -1,9 +1,10 @@
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { HStack, Stack, TextInput, Text } from "@react-native-material/core";
-import { NotesContext } from "../store/userNotes-context";
 import { GlobalStyles, Routes } from "../constants";
-import { storeNote, updateNote } from "../api/notesApi";
+// import { storeNote, updateNote } from "../api/notesApi";
+import { createNote, updateNote } from "../store/notes-thunks";
+import { useAppDispatch } from "../store";
 
 type NoteEditorProps = {
   navigation: any; // todo type
@@ -15,23 +16,15 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
   const [title, setTitle] = useState(isNewNote ? "" : route.params.title);
   const [note, setNote] = useState(isNewNote ? "" : route.params.note);
   const isNoteComplete = !!note && !!title;
-  const { addNote, editNote } = useContext(NotesContext);
+  const dispatch = useAppDispatch();
 
   const handleSaveNote = async () => {
-    try {
-      if (isNewNote) {
-        const noteData = { title, note };
-        const id = await storeNote(noteData);
-        addNote({ id, ...noteData });
-      } else {
-        const noteId = route.params.id;
-        editNote({ id: noteId, title, note });
-        updateNote({ id: noteId, title, note });
-      }
-    } catch (error) {
-      console.log(error);
+    if (isNewNote) {
+      const noteData = { title, note };
+      dispatch(createNote(noteData));
+    } else {
+      dispatch(updateNote({ id: route.params.id, title, note }));
     }
-
     navigation.navigate(Routes.NotesList);
   };
 

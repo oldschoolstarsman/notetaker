@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FlatList,
   View,
@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Text, Flex, AppBar } from "@react-native-material/core";
-import { NotesContext } from "../store/userNotes-context";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { Routes } from "../constants";
 import SearchBar from "react-native-dynamic-search-bar";
@@ -15,12 +14,12 @@ import FabButton from "../components/FabButton";
 import { GlobalStyles } from "../constants";
 import { SheetManager } from "react-native-actions-sheet";
 import { useAppDispatch, useAppSelector } from "../store";
-import { fetchNotes } from "../store/notes-thunk";
+import { fetchNotes } from "../store/notes-thunks";
 
 function NotesList({ navigation }) {
   const { colors } = GlobalStyles;
   const notes = useAppSelector((state) => state.notes);
-  const isLoading = useAppSelector((state) => state.isLoading);
+  const isFetching = useAppSelector((state) => state.isFetching);
   const [searchInput, setSearchInput] = useState("");
   const [openSearch, setSearchOpen] = useState(false);
   const userSearching = searchInput !== "";
@@ -53,11 +52,11 @@ function NotesList({ navigation }) {
   function closeBottomSheetDrawer() {
     SheetManager.hide("note-actions-sheet");
   }
-  function openNoteActionsBottomDrawer(item) {
+  function openNoteActionsBottomDrawer(item: NoteDTO) {
     SheetManager.show("note-actions-sheet", { payload: { item } });
   }
 
-  function renderItem({ item }) {
+  function renderItem({ item }: { item: NoteDTO }) {
     const isFavorite = item.isFavorite;
 
     return (
@@ -85,7 +84,7 @@ function NotesList({ navigation }) {
     );
   }
 
-  if (isLoading) {
+  if (isFetching) {
     return <Text>fetching data...</Text>;
   }
 
