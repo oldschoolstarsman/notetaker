@@ -34,7 +34,7 @@ export const noteSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(createNote.fulfilled, (state, action) => {
-        state.notes = [...state.notes, action.payload];
+        state.notes = [...state.notes, action.payload]; // todo fixme type
         state.isLoading = false;
       })
       .addCase(removeNote.pending, (state) => {

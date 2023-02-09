@@ -3,14 +3,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import NotesList from "./screens/NotesList";
 import NoteEditor from "./screens/NoteEditor";
 import { GlobalStyles, Routes } from "./constants";
-import NotesContextProvider from "./store/userNotes-context";
 import { StatusBar } from "react-native";
 import { SheetProvider } from "react-native-actions-sheet";
 import "./components/sheets/sheets";
-import { persistor, store, useAppSelector } from "./store";
+import { persistor, store } from "./store";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { useEffect } from "react";
 
 const Stack = createNativeStackNavigator();
 

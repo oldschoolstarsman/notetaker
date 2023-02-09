@@ -1,7 +1,8 @@
 type Note = {
   title: string;
   note: string;
-  isFavorite: boolean;
 };
 
-type NoteDTO = Note & { id: string };
+type NoteDTO = Note & { id: string; isFavorite: boolean };
+
+type ColoredNote = NoteDTO & { color?: string };

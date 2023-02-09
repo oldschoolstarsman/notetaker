@@ -2,7 +2,7 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { HStack, Stack, TextInput, Text } from "@react-native-material/core";
 import { GlobalStyles, Routes } from "../constants";
-// import { storeNote, updateNote } from "../api/notesApi";
+import ColorPicker from "../components/ColorPicker";
 import { createNote, updateNote } from "../store/notes-thunks";
 import { useAppDispatch } from "../store";
 
@@ -13,17 +13,28 @@ type NoteEditorProps = {
 
 const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
   const isNewNote = route.params === undefined;
-  const [title, setTitle] = useState(isNewNote ? "" : route.params.title);
-  const [note, setNote] = useState(isNewNote ? "" : route.params.note);
+  const [title, setTitle] = useState(
+    isNewNote ? "" : (route.params.title as Note["title"])
+  );
+  const [note, setNote] = useState(
+    isNewNote ? "" : (route.params.note as Note["note"])
+  );
+
   const isNoteComplete = !!note && !!title;
   const dispatch = useAppDispatch();
 
   const handleSaveNote = async () => {
     if (isNewNote) {
-      const noteData = { title, note };
-      dispatch(createNote(noteData));
+      dispatch(createNote({ title, note }));
     } else {
-      dispatch(updateNote({ id: route.params.id, title, note }));
+      dispatch(
+        updateNote({
+          id: route.params.id,
+          title,
+          note,
+          isFavorite: route.params.isFavorite,
+        })
+      );
     }
     navigation.navigate(Routes.NotesList);
   };
@@ -34,17 +45,17 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Stack spacing={8}>
+      <Stack fill spacing={8}>
         <TextInput
           color="black"
-          placeholder="title"
+          placeholder="create a title"
           value={title}
           onChangeText={(text) => setTitle(text)}
           variant="outlined"
         />
         <TextInput
           color="black"
-          placeholder="what I want to save"
+          placeholder="create a note"
           inputContainerStyle={styles.noteDetails}
           value={note}
           multiline
@@ -89,7 +100,7 @@ const styles = StyleSheet.create({
   },
   noteDetails: {
     alignItems: "flex-start",
-    height: 500,
+    height: 400,
   },
   button: {
     padding: 12,

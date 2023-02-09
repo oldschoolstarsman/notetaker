@@ -9,14 +9,13 @@ export async function storeNote(noteData) {
 }
 
 export async function updateNote(noteData) {
-  const { note, title, isFavorite } = noteData;
+  const { note, title, isFavorite, color } = noteData;
   const response = await axios.put(BACKEND_URL + `/notes/${noteData.id}.json`, {
     note,
     title,
     isFavorite,
+    color,
   });
-  console.log(noteData);
-  console.log(response.data);
   return {
     id: noteData.id,
     ...response.data,
@@ -33,6 +32,7 @@ export async function getNotes() {
       note: res.data[key].note,
       title: res.data[key].title,
       isFavorite: res.data[key].isFavorite,
+      color: res.data[key].color,
     };
     notes.push(obj);
   }

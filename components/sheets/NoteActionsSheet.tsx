@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useRef } from "react";
 import { HStack, VStack, Text } from "@react-native-material/core";
 import ActionSheet, {
   ActionSheetRef,
@@ -10,8 +10,12 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { removeNote, updateNote } from "../../store/notes-thunks";
 import { useAppDispatch } from "../../store";
+import { View } from "react-native";
+import ColorPicker from "../ColorPicker";
 
-function NoteActionsSheet(props: SheetProps<{ item: NoteDTO }>) {
+function NoteActionsSheet(
+  props: SheetProps<{ item: ColoredNote; updateNote: () => void }>
+) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
   const item = props.payload?.item;
   const navigation = useNavigation();
@@ -35,14 +39,26 @@ function NoteActionsSheet(props: SheetProps<{ item: NoteDTO }>) {
     <ActionSheet
       ref={actionSheetRef}
       id={props.sheetId}
+      defaultOverlayOpacity={0.3}
       containerStyle={{
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,
+        paddingVertical: 15,
       }}
     >
+      <ColorPicker note={item} />
+      <View
+        style={{
+          height: 5,
+          backgroundColor: GlobalStyles.colors.lightGrey,
+          marginTop: 20,
+          marginHorizontal: 120,
+          borderRadius: 2,
+        }}
+      />
       <HStack
         style={{
-          height: 85,
+          height: 75,
           justifyContent: "space-around",
           alignItems: "center",
         }}

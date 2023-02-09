@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../store";
-import { fetchNotes } from "../store/notes-thunk";
+import { fetchNotes } from "../store/notes-thunks";
 
 const useNotes = () => {
   const [results, setResults] = useState([]);

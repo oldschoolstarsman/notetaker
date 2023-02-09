@@ -15,6 +15,7 @@ import { GlobalStyles } from "../constants";
 import { SheetManager } from "react-native-actions-sheet";
 import { useAppDispatch, useAppSelector } from "../store";
 import { fetchNotes } from "../store/notes-thunks";
+import { updateNote } from "../api/notesApi";
 
 function NotesList({ navigation }) {
   const { colors } = GlobalStyles;
@@ -52,17 +53,19 @@ function NotesList({ navigation }) {
   function closeBottomSheetDrawer() {
     SheetManager.hide("note-actions-sheet");
   }
-  function openNoteActionsBottomDrawer(item: NoteDTO) {
-    SheetManager.show("note-actions-sheet", { payload: { item } });
+
+  function openNoteActionsBottomDrawer(item: ColoredNote) {
+    SheetManager.show("note-actions-sheet", {
+      payload: { item, setColor: () => updateNote(item) },
+    });
   }
 
-  function renderItem({ item }: { item: NoteDTO }) {
+  function renderItem({ item }: { item: ColoredNote }) {
     const isFavorite = item.isFavorite;
-
     return (
       <TouchableOpacity
         onLongPress={() => openNoteActionsBottomDrawer(item)}
-        style={styles.tile}
+        style={[styles.tile, { backgroundColor: item.color || "" }]}
         onPress={() => handleOpenNote(item.id, item.title, item.note)}
       >
         <View style={styles.favoriteBtn}>
@@ -177,7 +180,7 @@ const styles = StyleSheet.create({
     margin: 4,
     flex: 1,
     height: 230,
-    backgroundColor: GlobalStyles.colors.lightGrey,
+    // backgroundColor: GlobalStyles.colors.lightGrey,
     overflow: "hidden",
     borderRadius: 8,
   },
