@@ -1,90 +1,35 @@
 import { useEffect, useState } from "react";
-import {
-  FlatList,
-  View,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, Image, StyleSheet } from "react-native";
 import { Text, Flex, AppBar } from "@react-native-material/core";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { Routes } from "../constants";
 import SearchBar from "react-native-dynamic-search-bar";
 import FabButton from "../components/FabButton";
 import { GlobalStyles } from "../constants";
-import { SheetManager } from "react-native-actions-sheet";
 import { useAppDispatch, useAppSelector } from "../store";
 import { fetchNotes } from "../store/notes-thunks";
-import { updateNote } from "../api/notesApi";
+import { Tabs } from "../components/TabNavigation";
+import { notesSelector } from "../store/notes-selectors";
+import { setSearchQuery } from "../store/notes-reducer";
 
 function NotesList({ navigation }) {
   const { colors } = GlobalStyles;
-  const notes = useAppSelector((state) => state.notes);
+  const notes = useAppSelector(notesSelector);
   const isFetching = useAppSelector((state) => state.isFetching);
-  const [searchInput, setSearchInput] = useState("");
   const [openSearch, setSearchOpen] = useState(false);
-  const userSearching = searchInput !== "";
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchNotes());
   }, []);
 
-  const filteredNotes = userSearching
-    ? notes.filter((item) => {
-        return (
-          item.note.toLowerCase().includes(searchInput.toLowerCase()) ||
-          item.title.toLowerCase().includes(searchInput.toLowerCase())
-        );
-      })
-    : notes;
-
-  function handleOpenNote(id, title, note) {
-    navigation.navigate(Routes.NoteEditor, { id, title, note });
-    closeBottomSheetDrawer();
-    setSearchInput("");
-  }
-
   function handleCreateNewNote() {
     navigation.navigate(Routes.NoteEditor);
-    setSearchInput("");
+    dispatch(setSearchQuery(""));
   }
 
-  function closeBottomSheetDrawer() {
-    SheetManager.hide("note-actions-sheet");
-  }
-
-  function openNoteActionsBottomDrawer(item: ColoredNote) {
-    SheetManager.show("note-actions-sheet", {
-      payload: { item, setColor: () => updateNote(item) },
-    });
-  }
-
-  function renderItem({ item }: { item: ColoredNote }) {
-    const isFavorite = item.isFavorite;
-    return (
-      <TouchableOpacity
-        onLongPress={() => openNoteActionsBottomDrawer(item)}
-        style={[styles.tile, { backgroundColor: item.color || "" }]}
-        onPress={() => handleOpenNote(item.id, item.title, item.note)}
-      >
-        <View style={styles.favoriteBtn}>
-          <Icon
-            color={GlobalStyles.colors.accent}
-            size={18}
-            name={isFavorite ? "star" : undefined}
-          />
-        </View>
-        <Text
-          numberOfLines={1}
-          style={{ marginBottom: 4, width: "90%" }}
-          variant="h6"
-        >
-          {item.title}
-        </Text>
-        <Text variant="body2">{item.note}</Text>
-      </TouchableOpacity>
-    );
+  function handleSearchQuery(text) {
+    dispatch(setSearchQuery(text));
   }
 
   if (isFetching) {
@@ -101,14 +46,6 @@ function NotesList({ navigation }) {
           <Image source={require("../assets/empty-list.png")} />
         </Flex>
         {renderFabButton()}
-      </View>
-    );
-  }
-
-  function renderSearchNoMatch() {
-    return (
-      <View style={styles.container}>
-        <Text>no notes found..</Text>
       </View>
     );
   }
@@ -138,11 +75,11 @@ function NotesList({ navigation }) {
           ) : (
             <SearchBar
               placeholder="Search notes ..."
-              onChangeText={setSearchInput}
-              onClearPress={() => setSearchInput("")}
+              onChangeText={handleSearchQuery}
+              onClearPress={() => dispatch(setSearchQuery(""))}
               onSearchPress={() => {
                 setSearchOpen(false);
-                setSearchInput("");
+                dispatch(setSearchQuery(""));
               }}
               searchIconComponent={<Icon size={24} name="magnify" />}
               style={{
@@ -153,14 +90,7 @@ function NotesList({ navigation }) {
           )
         }
       />
-      {filteredNotes.length === 0 && renderSearchNoMatch()}
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        numColumns={2}
-        horizontal={false}
-        renderItem={renderItem}
-        data={filteredNotes}
-      />
+      <Tabs />
       {renderFabButton()}
     </View>
   );
@@ -170,7 +100,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 10,
-    paddingHorizontal: 12,
     backgroundColor: GlobalStyles.colors.white,
   },
   tile: {
@@ -180,7 +109,6 @@ const styles = StyleSheet.create({
     margin: 4,
     flex: 1,
     height: 230,
-    // backgroundColor: GlobalStyles.colors.lightGrey,
     overflow: "hidden",
     borderRadius: 8,
   },

@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import NotesList from "./screens/NotesList";
+import NotesListScreen from "./screens/NotesList";
 import NoteEditor from "./screens/NoteEditor";
 import { GlobalStyles, Routes } from "./constants";
 import { StatusBar } from "react-native";
@@ -34,7 +34,7 @@ export default function App() {
               <Stack.Screen
                 options={{ headerShown: false }}
                 name={Routes.NotesList}
-                component={NotesList}
+                component={NotesListScreen}
               />
               <Stack.Screen
                 options={{ title: "All notes" }}

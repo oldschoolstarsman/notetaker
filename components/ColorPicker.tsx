@@ -6,7 +6,6 @@ import { updateNote } from "../store/notes-thunks";
 
 function ColorPicker({ note }) {
   const colors = ColorPickerColors;
-  console.log(note);
   const dispatch = useAppDispatch();
   return (
     <VStack center spacing={6}>

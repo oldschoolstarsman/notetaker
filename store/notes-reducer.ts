@@ -6,13 +6,18 @@ const initialState = {
   isFetching: false,
   isLoading: false,
   error: null,
+  searchQuery: "hello",
 };
 export type NotesState = typeof initialState;
 
 export const noteSlice = createSlice({
   name: "notes",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    setSearchQuery: (state, action: PayloadAction<string>) => {
+      state.searchQuery = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchNotes.pending, (state) => {
@@ -78,5 +83,5 @@ export const noteSlice = createSlice({
   },
 });
 
-export const {} = noteSlice.actions;
+export const { setSearchQuery } = noteSlice.actions;
 export default noteSlice.reducer;
