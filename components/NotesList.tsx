@@ -19,7 +19,7 @@ function NotesList({ navigation, route }) {
   const data = route.name === "All" ? notes : favoriteNotes;
   const dispatch = useAppDispatch();
 
-  function openNoteActionsBottomDrawer(item: ColoredNote) {
+  function openNoteActionsBottomDrawer(item: NoteDTO) {
     SheetManager.show("note-actions-sheet", {
       payload: { item, setColor: () => updateNote(item) },
     });
@@ -29,18 +29,18 @@ function NotesList({ navigation, route }) {
     SheetManager.hide("note-actions-sheet");
   }
 
-  function handleOpenNote(id, title, note) {
-    navigation.navigate(Routes.NoteEditor, { id, title, note });
+  function handleOpenNote(item) {
+    navigation.navigate(Routes.NoteEditor, item);
     closeBottomSheetDrawer();
     dispatch(setSearchQuery(""));
   }
 
-  function renderItem({ item }: { item: ColoredNote }) {
+  function renderItem({ item }: { item: NoteDTO }) {
     const isFavorite = item.isFavorite;
     return (
       <TouchableWithoutFeedback
         onLongPress={() => openNoteActionsBottomDrawer(item)}
-        onPress={() => handleOpenNote(item.id, item.title, item.note)}
+        onPress={() => handleOpenNote(item)}
       >
         <View
           style={[
@@ -61,12 +61,15 @@ function NotesList({ navigation, route }) {
           <View style={{ padding: 5 }}>
             <Text
               numberOfLines={1}
-              style={{ marginBottom: 4, width: "90%" }}
-              variant="h6"
+              style={{
+                marginBottom: 2,
+                width: "90%",
+                fontWeight: "400",
+              }}
             >
               {item.title}
             </Text>
-            <Text variant="body2">{item.note}</Text>
+            <Text style={{ fontSize: 14 }}>{item.note}</Text>
           </View>
         </View>
       </TouchableWithoutFeedback>

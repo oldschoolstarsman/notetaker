@@ -16,6 +16,13 @@ function FabButton({ action, iconName, position }) {
         bottom: 24,
         right: 24,
         position: "absolute",
+        shadowOffset: {
+          width: 0,
+          height: 9,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2,
+        elevation: 6,
         ...position,
       }}
     >

@@ -8,25 +8,23 @@ export const favoritesNotesSelector = createSelector(notesSelector, (notes) =>
   notes.filter((note) => note.isFavorite)
 );
 
-export const searchQuerySelector = (state: NotesState) =>
-  state.searchQuery.toLowerCase().trim();
+export const searchQuerySelector = (state: NotesState) => state.searchQuery;
 
-const includesString = (
-  notes: NoteDTO[],
-  searchQuery: RootState["searchQuery"]
-) =>
+const queryMatch = (notes: NoteDTO[], searchQuery: RootState["searchQuery"]) =>
   notes.filter((note) =>
-    !!searchQuery
-      ? note.title.includes(searchQuery) || note.note.includes(searchQuery)
-      : notes
+    Object.values(note).some((v) => {
+      if (v && typeof v === "string") {
+        return v.toLowerCase().includes(searchQuery.toLowerCase());
+      }
+    })
   );
 
 export const filteredNotes = createSelector(
   [notesSelector, searchQuerySelector],
-  (notes, searchQuery) => includesString(notes, searchQuery)
+  (notes, searchQuery) => queryMatch(notes, searchQuery)
 );
 
 export const filteredFavoriteNotes = createSelector(
   [favoritesNotesSelector, searchQuerySelector],
-  (notes, searchQuery) => includesString(notes, searchQuery)
+  (notes, searchQuery) => queryMatch(notes, searchQuery)
 );

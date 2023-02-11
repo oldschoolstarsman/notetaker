@@ -9,12 +9,13 @@ import { GlobalStyles } from "../constants";
 import { useAppDispatch, useAppSelector } from "../store";
 import { fetchNotes } from "../store/notes-thunks";
 import { Tabs } from "../components/TabNavigation";
-import { notesSelector } from "../store/notes-selectors";
+import { notesSelector, searchQuerySelector } from "../store/notes-selectors";
 import { setSearchQuery } from "../store/notes-reducer";
 
 function NotesList({ navigation }) {
   const { colors } = GlobalStyles;
   const notes = useAppSelector(notesSelector);
+  const searchQuery = useAppSelector(searchQuerySelector);
   const isFetching = useAppSelector((state) => state.isFetching);
   const [openSearch, setSearchOpen] = useState(false);
   const dispatch = useAppDispatch();
@@ -74,6 +75,7 @@ function NotesList({ navigation }) {
             />
           ) : (
             <SearchBar
+              value={searchQuery}
               placeholder="Search notes ..."
               onChangeText={handleSearchQuery}
               onClearPress={() => dispatch(setSearchQuery(""))}

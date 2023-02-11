@@ -14,7 +14,7 @@ import { View } from "react-native";
 import ColorPicker from "../ColorPicker";
 
 function NoteActionsSheet(
-  props: SheetProps<{ item: ColoredNote; updateNote: () => void }>
+  props: SheetProps<{ item: NoteDTO; updateNote: () => void }>
 ) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
   const item = props.payload?.item;

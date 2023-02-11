@@ -16,9 +16,9 @@ const GlobalStyles = {
 const ColorPickerColors = [
   "#4a4e4d",
   "#0e9aa7",
-  "#3da4ab",
-  "#f6cd61",
   "#fe8a71",
+  "#f6cd61",
+  GlobalStyles.colors.lightGrey,
 ];
 
 export { Routes, GlobalStyles, ColorPickerColors };

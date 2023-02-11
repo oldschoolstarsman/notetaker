@@ -2,7 +2,6 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { HStack, Stack, TextInput, Text } from "@react-native-material/core";
 import { GlobalStyles, Routes } from "../constants";
-import ColorPicker from "../components/ColorPicker";
 import { createNote, updateNote } from "../store/notes-thunks";
 import { useAppDispatch } from "../store";
 
@@ -23,13 +22,14 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
   const isNoteComplete = !!note && !!title;
   const dispatch = useAppDispatch();
 
-  const handleSaveNote = async () => {
+  const handleSaveNote = () => {
     if (isNewNote) {
       dispatch(createNote({ title, note }));
     } else {
       dispatch(
         updateNote({
           id: route.params.id,
+          color: route.params.color,
           title,
           note,
           isFavorite: route.params.isFavorite,
@@ -47,6 +47,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
     <View style={styles.container}>
       <Stack fill spacing={8}>
         <TextInput
+          inputContainerStyle={styles.input}
           color="black"
           placeholder="create a title"
           value={title}
@@ -54,9 +55,9 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
           variant="outlined"
         />
         <TextInput
+          inputContainerStyle={styles.noteDetails}
           color="black"
           placeholder="create a note"
-          inputContainerStyle={styles.noteDetails}
           value={note}
           multiline
           variant="outlined"
@@ -98,7 +99,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
+  input: {
+    // padding: 30,
+  },
   noteDetails: {
+    paddingVertical: 10,
     alignItems: "flex-start",
     height: 400,
   },
