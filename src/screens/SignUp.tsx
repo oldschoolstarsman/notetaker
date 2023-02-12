@@ -43,10 +43,8 @@ function SignUpScreen({ navigation }) {
         value.email,
         value.password
       );
-      console.log(user);
       return user;
     } catch (error) {
-      console.log(error);
       setValue({
         ...value,
         error: error.message,
@@ -58,9 +56,6 @@ function SignUpScreen({ navigation }) {
     <View style={styles.container}>
       <VStack fill spacing={25} center justify="center">
         <TextInput
-          onFocus={() =>
-            Boolean(value.error) ? setValue({ ...value, email: "" }) : undefined
-          }
           style={styles.input}
           placeholder="Email"
           value={value.email}
@@ -68,11 +63,6 @@ function SignUpScreen({ navigation }) {
         />
 
         <TextInput
-          onFocus={() =>
-            Boolean(value.error)
-              ? setValue({ ...value, password: "" })
-              : undefined
-          }
           style={styles.input}
           placeholder="Password"
           secureTextEntry={true}
