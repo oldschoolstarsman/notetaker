@@ -117,7 +117,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
                   fontFamily: "nunito",
                   color: isNoteComplete
                     ? GlobalStyles.colors.white
-                    : GlobalStyles.colors.darkKey,
+                    : GlobalStyles.colors.darkGrey,
                 }}
               >
                 Save

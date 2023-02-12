@@ -14,7 +14,7 @@ const GlobalStyles = {
   colors: {
     white: "rgba(255, 255, 255, 1)",
     lightGrey: "rgba(246, 246, 246, 1)",
-    darkKey: "rgba(185, 183, 183, 1)",
+    darkGrey: "rgba(185, 183, 183, 1)",
     orange: "rgb(243, 128, 100)",
     lightGreen: "rgb(236, 253, 236)",
     accent: "rgba(37, 126, 129, 1)",
