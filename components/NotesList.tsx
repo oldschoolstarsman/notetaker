@@ -14,6 +14,7 @@ import { GlobalStyles, Routes } from "../constants";
 import { filteredFavoriteNotes, filteredNotes } from "../store/notes-selectors";
 import { useAppDispatch, useAppSelector } from "../store";
 import { setSearchQuery } from "../store/notes-reducer";
+import FadeElement from "./FadeComponent";
 
 function NotesList({ navigation, route }) {
   const notes = useAppSelector(filteredNotes);
@@ -25,6 +26,7 @@ function NotesList({ navigation, route }) {
   function openNoteActionsBottomDrawer(item: NoteDTO) {
     SheetManager.show("note-actions-sheet", {
       payload: { item, setColor: () => updateNote(item) },
+      onClose: () => dispatch(setSelectItem(null)),
     });
   }
 
@@ -44,6 +46,7 @@ function NotesList({ navigation, route }) {
     const isSelected = item.id === selected;
     return (
       <TouchableWithoutFeedback
+        style={{ flex: 1 }}
         onLongPress={() => {
           openNoteActionsBottomDrawer(item);
           dispatch(setSelectItem(item.id));
@@ -54,7 +57,10 @@ function NotesList({ navigation, route }) {
           style={[
             styles.tile,
             isSelected
-              ? { borderWidth: 1, borderColor: GlobalStyles.colors.black }
+              ? {
+                  borderWidth: 1,
+                  borderColor: GlobalStyles.colors.lighterDark,
+                }
               : undefined,
             {
               backgroundColor: item.color || GlobalStyles.colors.lightGrey,
@@ -62,13 +68,14 @@ function NotesList({ navigation, route }) {
             },
           ]}
         >
-          <View style={styles.favoriteBtn}>
+          <FadeElement visible={isFavorite} style={styles.favoriteBtn}>
             <Icon
-              color={GlobalStyles.colors.black}
+              color={GlobalStyles.colors.lighterDark}
               size={18}
               name={isFavorite ? "star-outline" : undefined}
             />
-          </View>
+          </FadeElement>
+
           <View style={{ padding: 5 }}>
             <Text
               numberOfLines={1}
@@ -124,7 +131,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     margin: 4,
     flex: 1,
-    width: "50%",
     maxHeight: 200,
     overflow: "hidden",
     borderRadius: 10,

@@ -12,7 +12,9 @@ import { removeNote, updateNote } from "../../store/notes-thunks";
 import { useAppDispatch } from "../../store";
 import { View } from "react-native";
 import ColorPicker from "../ColorPicker";
-import { setSelectItem } from "../../store/notes-reducer";
+import RNBounceable from "@freakycoder/react-native-bounceable";
+import FadeElement from "../FadeComponent";
+import { Spacer } from "react-native-flex-layout";
 
 function NoteActionsSheet(
   props: SheetProps<{ item: NoteDTO; updateNote: () => void }>
@@ -24,7 +26,6 @@ function NoteActionsSheet(
 
   function closeDrawer() {
     SheetManager.hide(props.sheetId);
-    dispatch(setSelectItem(null));
   }
 
   async function handleConfirm() {
@@ -45,9 +46,7 @@ function NoteActionsSheet(
   }
 
   function handleToggleFavorite() {
-    console.log(item);
     dispatch(updateNote({ ...item, isFavorite: !item.isFavorite }));
-    closeDrawer();
   }
 
   return (
@@ -60,62 +59,80 @@ function NoteActionsSheet(
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,
         paddingVertical: 15,
+        height: 200,
       }}
     >
-      <ColorPicker note={item} />
-      <View
-        style={{
-          height: 5,
-          backgroundColor: GlobalStyles.colors.lightGrey,
-          marginTop: 20,
-          marginHorizontal: 120,
-          borderRadius: 2,
-        }}
-      />
-      <HStack
-        style={{
-          height: 75,
-          justifyContent: "space-around",
-          alignItems: "center",
-        }}
-      >
-        <VStack center>
-          <Icon
-            onPress={handleConfirm}
-            color={GlobalStyles.colors.red}
-            size={28}
-            name="delete-outline"
-          />
-          <Text color={GlobalStyles.colors.red} variant="caption">
-            Delete
-          </Text>
-        </VStack>
-        <VStack center>
-          <Icon
-            onPress={handleToggleFavorite}
-            color={GlobalStyles.colors.black}
-            size={28}
-            name="star-outline"
-          />
-          <Text color={GlobalStyles.colors.black} variant="caption">
-            Favourite
-          </Text>
-        </VStack>
-        <VStack center>
-          <Icon
-            onPress={() => {
-              navigation.navigate(Routes.NoteEditor, item);
-              closeDrawer();
+      <FadeElement duration={500} visible={true}>
+        <ColorPicker note={item} />
+        <View
+          style={{
+            height: 5,
+            marginTop: 20,
+            marginHorizontal: 120,
+            borderRadius: 2,
+          }}
+        />
+        <HStack
+          style={{
+            height: 75,
+            justifyContent: "space-around",
+            alignItems: "center",
+            backgroundColor: GlobalStyles.colors.lighterDark,
+            borderRadius: 25,
+            paddingHorizontal: 25,
+            marginHorizontal: 20,
+          }}
+        >
+          <RNBounceable
+            style={{
+              width: 50,
+              height: 50,
+              justifyContent: "center",
+              alignItems: "center",
             }}
-            color={GlobalStyles.colors.accent}
-            size={28}
-            name="pencil-outline"
-          />
-          <Text color={GlobalStyles.colors.accent} variant="caption">
-            Edit
-          </Text>
-        </VStack>
-      </HStack>
+          >
+            <Icon
+              onPress={handleConfirm}
+              color={GlobalStyles.colors.lightGreen}
+              size={28}
+              name="delete-outline"
+            />
+          </RNBounceable>
+          <RNBounceable
+            style={{
+              width: 50,
+              height: 50,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Icon
+              onPress={handleToggleFavorite}
+              color={GlobalStyles.colors.lightGreen}
+              size={28}
+              name="star-outline"
+            />
+          </RNBounceable>
+          <RNBounceable
+            style={{
+              width: 50,
+              height: 50,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Icon
+              onPress={() => {
+                navigation.navigate(Routes.NoteEditor, item);
+                closeDrawer();
+              }}
+              color={GlobalStyles.colors.lightGreen}
+              size={28}
+              name="pencil-outline"
+            />
+          </RNBounceable>
+        </HStack>
+      </FadeElement>
     </ActionSheet>
   );
 }

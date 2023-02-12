@@ -1,6 +1,7 @@
+import RNBounceable from "@freakycoder/react-native-bounceable";
 import { Text, VStack } from "@react-native-material/core";
 import { TouchableOpacity, StyleSheet, ScrollView, View } from "react-native";
-import { ColorPickerColors } from "../constants";
+import { ColorPickerColors, GlobalStyles } from "../constants";
 import { useAppDispatch } from "../store";
 import { updateNote } from "../store/notes-thunks";
 
@@ -9,10 +10,12 @@ function ColorPicker({ note }) {
   const dispatch = useAppDispatch();
   return (
     <VStack center spacing={6}>
-      <Text variant="caption">Add a little bit of color</Text>
+      <Text style={{ fontFamily: "nunito" }} variant="caption">
+        Add a little bit of color
+      </Text>
       <ScrollView horizontal>
         {colors.map((color) => (
-          <TouchableOpacity
+          <RNBounceable
             onPress={() => {
               dispatch(updateNote({ ...note, color: color }));
             }}

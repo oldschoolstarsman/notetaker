@@ -75,7 +75,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
                 paddingVertical: 12,
                 borderRadius: 16,
                 backgroundColor: GlobalStyles.colors.yellow,
-                borderColor: GlobalStyles.colors.black,
+                borderColor: GlobalStyles.colors.lighterDark,
                 borderWidth: 0.5,
                 shadowOffset: {
                   width: 0,
@@ -99,8 +99,8 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
               paddingHorizontal: 16,
               paddingVertical: 12,
               borderRadius: 16,
-              backgroundColor: GlobalStyles.colors.black,
-              borderColor: GlobalStyles.colors.black,
+              backgroundColor: GlobalStyles.colors.lighterDark,
+              borderColor: GlobalStyles.colors.lighterDark,
               borderWidth: 0.5,
               shadowOffset: {
                 width: 0,
