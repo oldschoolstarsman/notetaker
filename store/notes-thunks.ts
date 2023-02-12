@@ -5,6 +5,7 @@ import {
   storeNote,
   updateNote as editNote,
 } from "../api/notesApi";
+import { Note, NoteDTO } from "../types";
 
 export const fetchNotes = createAsyncThunk("notes/fetchNotes", () =>
   getNotes()

@@ -1,5 +1,6 @@
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import RNBounceable from "@freakycoder/react-native-bounceable";
+import { GlobalStyles } from "../constants";
 
 function FabButton({ action, iconName, position }) {
   return (
@@ -12,7 +13,7 @@ function FabButton({ action, iconName, position }) {
         alignItems: "center",
         padding: 10,
         borderRadius: 100,
-        backgroundColor: "black",
+        backgroundColor: GlobalStyles.colors.lighterDark,
         bottom: 24,
         right: 24,
         position: "absolute",

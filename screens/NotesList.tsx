@@ -11,12 +11,18 @@ import { fetchNotes } from "../store/notes-thunks";
 import { Tabs } from "../components/TabNavigation";
 import { notesSelector, searchQuerySelector } from "../store/notes-selectors";
 import { setSearchQuery } from "../store/notes-reducer";
+import FadeElement from "../components/FadeComponent";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../types";
 
-function NotesList({ navigation }) {
+type NotesListProps = NativeStackScreenProps<RootStackParamList, "NotesList">;
+
+const NotesList: React.FC<NotesListProps> = ({ navigation }) => {
   const { colors } = GlobalStyles;
   const notes = useAppSelector(notesSelector);
   const searchQuery = useAppSelector(searchQuerySelector);
   const isFetching = useAppSelector((state) => state.isFetching);
+  const isLoading = useAppSelector((state) => state.isLoading);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -36,7 +42,7 @@ function NotesList({ navigation }) {
     return <Text>fetching data...</Text>;
   }
 
-  if (notes.length === 0) {
+  if (notes.length === 0 && !isLoading) {
     return (
       <View style={styles.container}>
         <Flex fill center>
@@ -61,7 +67,7 @@ function NotesList({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
+    <FadeElement visible={true} style={styles.container}>
       <View style={styles.searchbarContainer}>
         <SearchBar
           value={searchQuery}
@@ -85,9 +91,9 @@ function NotesList({ navigation }) {
       </View>
       <Tabs />
       {renderFabButton()}
-    </View>
+    </FadeElement>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

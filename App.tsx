@@ -43,7 +43,7 @@ export default function App() {
             <SheetProvider>
               <Stack.Navigator
                 screenOptions={{
-                  statusBarColor: "black",
+                  statusBarColor: GlobalStyles.colors.lighterDark,
                   contentStyle: { backgroundColor: GlobalStyles.colors.white },
                   headerShadowVisible: false,
                 }}

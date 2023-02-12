@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Note, NoteDTO } from "../types";
 import { createNote, fetchNotes, removeNote, updateNote } from "./notes-thunks";
 
 const initialState = {
-  notes: [] as NoteDTO[],
+  notes: [] as NoteDTO[] | Note[],
   isFetching: false,
   isLoading: false,
   error: null,
@@ -43,7 +44,7 @@ export const noteSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(createNote.fulfilled, (state, action) => {
-        state.notes = [...state.notes, action.payload]; // todo fixme type
+        state.notes = [...state.notes, action.payload];
         state.isLoading = false;
       })
       .addCase(removeNote.pending, (state) => {
@@ -74,11 +75,11 @@ export const noteSlice = createSlice({
         updateNote.fulfilled,
         (state, action: PayloadAction<NoteDTO>) => {
           state.isLoading = false;
-          const newList = state.notes.map((item) => {
-            if (item.id === action.payload.id) {
+          const newList = state.notes.map((note: NoteDTO) => {
+            if (note.id === action.payload.id) {
               return action.payload;
             } else {
-              return item;
+              return note;
             }
           });
           state.notes = newList;

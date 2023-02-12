@@ -43,7 +43,7 @@ function ConfirmSheet(props: SheetProps<{ message: string }>) {
               paddingVertical: 12,
               borderRadius: 16,
               backgroundColor: GlobalStyles.colors.yellow,
-              borderColor: GlobalStyles.colors.black,
+              borderColor: GlobalStyles.colors.lighterDark,
               borderWidth: 0.5,
               shadowOffset: {
                 width: 0,
@@ -67,7 +67,7 @@ function ConfirmSheet(props: SheetProps<{ message: string }>) {
               paddingHorizontal: 16,
               paddingVertical: 12,
               borderRadius: 16,
-              backgroundColor: GlobalStyles.colors.black,
+              backgroundColor: GlobalStyles.colors.lighterDark,
               shadowOffset: {
                 width: 0,
                 height: 9,

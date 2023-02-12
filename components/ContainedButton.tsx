@@ -9,7 +9,7 @@ const ContainedButton = ({ action, label, backgroundColor, textColor }) => {
         paddingVertical: 12,
         borderRadius: 16,
         backgroundColor: backgroundColor,
-        borderColor: GlobalStyles.colors.black,
+        borderColor: GlobalStyles.colors.lighterDark,
         borderWidth: 1,
         shadowOffset: {
           width: 0,
