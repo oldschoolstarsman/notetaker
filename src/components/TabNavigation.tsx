@@ -1,5 +1,5 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { GlobalStyles } from "../constants";
+import { GlobalStyles, NavigationTabs } from "../constants";
 import NotesList from "./NotesList";
 
 const Tab = createMaterialTopTabNavigator();
@@ -28,19 +28,11 @@ export function Tabs() {
           fontFamily: "nunito",
         },
         tabBarActiveTintColor: GlobalStyles.colors.lighterDark,
-        tabBarInactiveTintColor: GlobalStyles.colors.darkKey,
+        tabBarInactiveTintColor: GlobalStyles.colors.darkGrey,
       }}
     >
-      <Tab.Screen
-        name="All"
-        component={NotesList}
-        options={{ tabBarLabel: "All" }}
-      />
-      <Tab.Screen
-        name="Favorites"
-        component={NotesList}
-        options={{ tabBarLabel: "Favorites" }}
-      />
+      <Tab.Screen name={NavigationTabs.All} component={NotesList} />
+      <Tab.Screen name={NavigationTabs.Favorites} component={NotesList} />
     </Tab.Navigator>
   );
 }

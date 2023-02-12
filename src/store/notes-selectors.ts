@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { NoteDTO } from "../types";
+import { NoteDTO } from "../../types";
 import { NotesState } from "./notes-reducer";
 
 export const notesSelector = (state: NotesState) => state.notes;

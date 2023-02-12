@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Note, NoteDTO } from "../types";
+import { Note, NoteDTO } from "../../types";
 import { createNote, fetchNotes, removeNote, updateNote } from "./notes-thunks";
 
 const initialState = {

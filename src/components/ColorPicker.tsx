@@ -1,7 +1,7 @@
 import RNBounceable from "@freakycoder/react-native-bounceable";
 import { Text, VStack } from "@react-native-material/core";
-import { TouchableOpacity, StyleSheet, ScrollView, View } from "react-native";
-import { ColorPickerColors, GlobalStyles } from "../constants";
+import { StyleSheet, ScrollView } from "react-native";
+import { ColorPickerColors } from "../constants";
 import { useAppDispatch } from "../store";
 import { updateNote } from "../store/notes-thunks";
 

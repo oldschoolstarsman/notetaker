@@ -15,10 +15,12 @@ import { filteredFavoriteNotes, filteredNotes } from "../store/notes-selectors";
 import { useAppDispatch, useAppSelector } from "../store";
 import { setSearchQuery } from "../store/notes-reducer";
 import FadeElement from "./FadeComponent";
+import { NoteDTO } from "../types";
 
 function NotesList({ navigation, route }) {
   const notes = useAppSelector(filteredNotes);
   const selected = useAppSelector((state) => state.selectedNote);
+  const searchQuery = useAppSelector((state) => state.searchQuery);
   const favoriteNotes = useAppSelector(filteredFavoriteNotes);
   const data = route.name === "All" ? notes : favoriteNotes;
   const dispatch = useAppDispatch();
@@ -97,10 +99,10 @@ function NotesList({ navigation, route }) {
     );
   }
 
-  if (data.length === 0) {
+  if (data.length === 0 && !!searchQuery) {
     return (
       <Flex fill style={{ backgroundColor: GlobalStyles.colors.white }} center>
-        <Image source={require("../assets/oops.png")} />
+        <Image source={require("../../assets/oops.png")} />
       </Flex>
     );
   }

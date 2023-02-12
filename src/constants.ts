@@ -1,6 +1,13 @@
 enum Routes {
   NotesList = "NoteList",
   NoteEditor = "NoteEditor",
+  LogIn = "LogIn",
+  SignUp = "SignUp",
+}
+
+enum NavigationTabs {
+  All = "All",
+  Favorites = "Favorites",
 }
 
 const GlobalStyles = {
@@ -8,9 +15,8 @@ const GlobalStyles = {
     white: "rgba(255, 255, 255, 1)",
     lightGrey: "rgba(246, 246, 246, 1)",
     darkKey: "rgba(185, 183, 183, 1)",
-    orange: "rgb(254, 214, 154, 1)",
+    orange: "rgb(243, 128, 100)",
     lightGreen: "rgb(236, 253, 236)",
-    black: "rgba(0, 0, 0, 1)",
     accent: "rgba(37, 126, 129, 1)",
     lightPurple: "rgb(243, 238, 253)",
     yellow: "rgb(251, 243, 152)",
@@ -19,14 +25,11 @@ const GlobalStyles = {
 };
 
 const ColorPickerColors = [
-  "#4a4e4d",
-  "#0e9aa7",
-  "#fe8a71",
+  GlobalStyles.colors.accent,
+  GlobalStyles.colors.orange,
   GlobalStyles.colors.lightPurple,
   GlobalStyles.colors.lightGreen,
-  GlobalStyles.colors.yellow,
-  GlobalStyles.colors.orange,
-  // GlobalStyles.colors.lightGrey,
+  GlobalStyles.colors.lightGrey,
 ];
 
-export { Routes, GlobalStyles, ColorPickerColors };
+export { Routes, GlobalStyles, ColorPickerColors, NavigationTabs };

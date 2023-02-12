@@ -30,7 +30,7 @@ function ConfirmSheet(props: SheetProps<{ message: string }>) {
         <Text
           style={{
             marginBottom: 10,
-            color: "black",
+            color: GlobalStyles.colors.lighterDark,
             fontWeight: "bold",
           }}
         >

@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { HStack, VStack, Text } from "@react-native-material/core";
+import { HStack } from "@react-native-material/core";
 import ActionSheet, {
   ActionSheetRef,
   SheetManager,
@@ -14,7 +14,7 @@ import { View } from "react-native";
 import ColorPicker from "../ColorPicker";
 import RNBounceable from "@freakycoder/react-native-bounceable";
 import FadeElement from "../FadeComponent";
-import { Spacer } from "react-native-flex-layout";
+import { NoteDTO } from "../../types";
 
 function NoteActionsSheet(
   props: SheetProps<{ item: NoteDTO; updateNote: () => void }>

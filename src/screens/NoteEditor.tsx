@@ -55,7 +55,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
             onChangeText={(text) => setTitle(text)}
           />
           <TextInput
-            style={[styles.input]}
+            style={styles.input}
             placeholder="create a note"
             value={note}
             multiline

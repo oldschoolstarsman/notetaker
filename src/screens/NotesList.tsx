@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { View, Image, StyleSheet } from "react-native";
-import { Text, Flex } from "@react-native-material/core";
+import { Text, Flex, Avatar, HStack } from "@react-native-material/core";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { Routes } from "../constants";
 import SearchBar from "react-native-dynamic-search-bar";
@@ -14,6 +14,9 @@ import { setSearchQuery } from "../store/notes-reducer";
 import FadeElement from "../components/FadeComponent";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
+import RNBounceable from "@freakycoder/react-native-bounceable";
+import { getAuth, signOut } from "firebase/auth";
+import { ActivityIndicator } from "react-native-paper";
 
 type NotesListProps = NativeStackScreenProps<RootStackParamList, "NotesList">;
 
@@ -24,6 +27,7 @@ const NotesList: React.FC<NotesListProps> = ({ navigation }) => {
   const isFetching = useAppSelector((state) => state.isFetching);
   const isLoading = useAppSelector((state) => state.isLoading);
   const dispatch = useAppDispatch();
+  const auth = getAuth();
 
   useEffect(() => {
     dispatch(fetchNotes());
@@ -39,17 +43,25 @@ const NotesList: React.FC<NotesListProps> = ({ navigation }) => {
   }
 
   if (isFetching) {
-    return <Text>fetching data...</Text>;
+    return (
+      <ActivityIndicator
+        animating={true}
+        color={GlobalStyles.colors.darkGrey}
+      />
+    );
   }
 
   if (notes.length === 0 && !isLoading) {
     return (
       <View style={styles.container}>
         <Flex fill center>
-          <Text style={{ marginVertical: 15 }} variant="h5">
+          <Text
+            style={{ marginVertical: 15, fontFamily: "nunito" }}
+            variant="h6"
+          >
             You don't have any notes
           </Text>
-          <Image source={require("../assets/empty-list.png")} />
+          <Image source={require("../../assets/empty-list.png")} />
         </Flex>
         {renderFabButton()}
       </View>
@@ -68,7 +80,14 @@ const NotesList: React.FC<NotesListProps> = ({ navigation }) => {
 
   return (
     <FadeElement visible={true} style={styles.container}>
-      <View style={styles.searchbarContainer}>
+      <HStack center spacing={6} style={styles.searchbarContainer}>
+        <RNBounceable onPress={() => signOut(auth)}>
+          <Avatar
+            color={GlobalStyles.colors.lightGreen}
+            size={42}
+            icon={(props) => <Icon name="account" {...props} />}
+          />
+        </RNBounceable>
         <SearchBar
           value={searchQuery}
           placeholder="Search notes ..."
@@ -78,17 +97,16 @@ const NotesList: React.FC<NotesListProps> = ({ navigation }) => {
             dispatch(setSearchQuery(""));
           }}
           searchIconComponent={<Icon size={24} name="magnify" />}
-          placeholderTextColor={GlobalStyles.colors.darkKey}
+          placeholderTextColor={GlobalStyles.colors.darkGrey}
           textInputStyle={{
             fontFamily: "nunito",
           }}
           style={{
             backgroundColor: colors.lightGrey,
             width: "100%",
-            height: 50,
           }}
         />
-      </View>
+      </HStack>
       <Tabs />
       {renderFabButton()}
     </FadeElement>
@@ -103,8 +121,7 @@ const styles = StyleSheet.create({
   },
   searchbarContainer: {
     height: 60,
-    paddingHorizontal: 30,
-    justifyContent: "center",
+    marginHorizontal: 34,
   },
 });
 
