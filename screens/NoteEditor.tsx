@@ -1,6 +1,12 @@
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, KeyboardAvoidingView, TextInput } from "react-native";
 import { useState } from "react";
-import { HStack, Stack, TextInput, Text } from "@react-native-material/core";
+import {
+  HStack,
+  Stack,
+  Text,
+  Pressable,
+  VStack,
+} from "@react-native-material/core";
 import { GlobalStyles, Routes } from "../constants";
 import { createNote, updateNote } from "../store/notes-thunks";
 import { useAppDispatch } from "../store";
@@ -44,52 +50,84 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Stack fill spacing={8}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <VStack m={12} spacing={12}>
         <TextInput
-          inputContainerStyle={styles.input}
-          color="black"
+          style={styles.input}
           placeholder="create a title"
           value={title}
           onChangeText={(text) => setTitle(text)}
-          variant="outlined"
         />
         <TextInput
-          inputContainerStyle={styles.noteDetails}
-          color="black"
+          style={[styles.input]}
           placeholder="create a note"
           value={note}
           multiline
-          variant="outlined"
           onChangeText={(text) => setNote(text)}
         />
-        <HStack spacing={6} justify="center">
+        <HStack m={12} spacing={45} justify="center">
           {!isNewNote && (
-            <TouchableOpacity style={{ flex: 1 }} onPress={handleCancel}>
-              <Text
-                style={[styles.buttonText, { color: GlobalStyles.colors.red }]}
-              >
+            <Pressable
+              style={{
+                alignItems: "center",
+                width: 150,
+                paddingHorizontal: 16,
+                paddingVertical: 12,
+                borderRadius: 16,
+                backgroundColor: GlobalStyles.colors.yellow,
+                borderColor: GlobalStyles.colors.black,
+                borderWidth: 0.5,
+                shadowOffset: {
+                  width: 0,
+                  height: 9,
+                },
+                shadowOpacity: 0.22,
+                shadowRadius: 1,
+                elevation: 3,
+              }}
+              onPress={handleCancel}
+            >
+              <Text style={{ fontWeight: "bold", fontFamily: "nunito" }}>
                 Cancel
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           )}
-          <TouchableOpacity
-            style={{ flex: 1 }}
+          <Pressable
+            style={{
+              alignItems: "center",
+              width: 150,
+              paddingHorizontal: 16,
+              paddingVertical: 12,
+              borderRadius: 16,
+              backgroundColor: GlobalStyles.colors.black,
+              borderColor: GlobalStyles.colors.black,
+              borderWidth: 0.5,
+              shadowOffset: {
+                width: 0,
+                height: 9,
+              },
+              shadowOpacity: 0.22,
+              shadowRadius: 1,
+              elevation: 3,
+            }}
             disabled={!isNoteComplete}
             onPress={handleSaveNote}
           >
             <Text
-              style={[
-                styles.buttonText,
-                { color: isNoteComplete ? GlobalStyles.colors.black : "grey" },
-              ]}
+              style={{
+                fontWeight: "bold",
+                fontFamily: "nunito",
+                color: isNoteComplete
+                  ? GlobalStyles.colors.white
+                  : GlobalStyles.colors.darkKey,
+              }}
             >
-              {"Save"}
+              Save
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </HStack>
-      </Stack>
-    </View>
+      </VStack>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -100,12 +138,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   input: {
-    // padding: 30,
+    borderColor: GlobalStyles.colors.lightGrey,
+    borderRadius: 16,
+    paddingVertical: 22,
+    paddingHorizontal: 12,
+    backgroundColor: "rgb(247, 249, 250)",
+    fontFamily: "nunito",
   },
   noteDetails: {
-    paddingVertical: 10,
-    alignItems: "flex-start",
-    height: 400,
+    // paddingVertical: 10,
+    // alignItems: "flex-start",
+    // height: 400,
   },
   button: {
     padding: 12,

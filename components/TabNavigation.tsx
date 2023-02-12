@@ -1,4 +1,5 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { View, Text } from "react-native";
 import { GlobalStyles } from "../constants";
 import NotesList from "./NotesList";
 
@@ -11,13 +12,24 @@ export function Tabs() {
       style={{
         elevation: 0,
         borderBottomColor: "white",
-        backgroundColor: "red",
       }}
       screenOptions={{
         tabBarPressColor: "transparent",
-        tabBarIndicatorStyle: { backgroundColor: GlobalStyles.colors.black },
-        tabBarStyle: { elevation: 0 },
-        tabBarLabelStyle: { fontWeight: "600" },
+        tabBarIndicatorStyle: {
+          backgroundColor: GlobalStyles.colors.black,
+        },
+        tabBarGap: 10,
+        tabBarBounces: true,
+        tabBarStyle: {
+          elevation: 0,
+          marginHorizontal: 30,
+        },
+        tabBarLabelStyle: {
+          fontWeight: "bold",
+          fontFamily: "nunito",
+        },
+        tabBarActiveTintColor: GlobalStyles.colors.black,
+        tabBarInactiveTintColor: GlobalStyles.colors.darkKey,
       }}
     >
       <Tab.Screen

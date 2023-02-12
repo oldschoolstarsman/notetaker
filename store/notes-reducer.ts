@@ -6,7 +6,8 @@ const initialState = {
   isFetching: false,
   isLoading: false,
   error: null,
-  searchQuery: "hello",
+  searchQuery: "",
+  selectedNote: null,
 };
 export type NotesState = typeof initialState;
 
@@ -16,6 +17,9 @@ export const noteSlice = createSlice({
   reducers: {
     setSearchQuery: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
+    },
+    setSelectItem: (state, action: PayloadAction<string>) => {
+      state.selectedNote = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -83,5 +87,5 @@ export const noteSlice = createSlice({
   },
 });
 
-export const { setSearchQuery } = noteSlice.actions;
+export const { setSearchQuery, setSelectItem } = noteSlice.actions;
 export default noteSlice.reducer;

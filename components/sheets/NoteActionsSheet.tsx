@@ -12,6 +12,7 @@ import { removeNote, updateNote } from "../../store/notes-thunks";
 import { useAppDispatch } from "../../store";
 import { View } from "react-native";
 import ColorPicker from "../ColorPicker";
+import { setSelectItem } from "../../store/notes-reducer";
 
 function NoteActionsSheet(
   props: SheetProps<{ item: NoteDTO; updateNote: () => void }>
@@ -23,6 +24,19 @@ function NoteActionsSheet(
 
   function closeDrawer() {
     SheetManager.hide(props.sheetId);
+    dispatch(setSelectItem(null));
+  }
+
+  async function handleConfirm() {
+    closeDrawer();
+    const canDelete = await SheetManager.show("confirm-sheet", {
+      payload: {
+        message: `Sure you want to delete this note?`,
+      },
+    });
+    if (canDelete) {
+      handleDeleteNote();
+    }
   }
 
   function handleDeleteNote() {
@@ -31,12 +45,14 @@ function NoteActionsSheet(
   }
 
   function handleToggleFavorite() {
+    console.log(item);
     dispatch(updateNote({ ...item, isFavorite: !item.isFavorite }));
     closeDrawer();
   }
 
   return (
     <ActionSheet
+      zIndex={50}
       ref={actionSheetRef}
       id={props.sheetId}
       defaultOverlayOpacity={0.3}
@@ -65,21 +81,25 @@ function NoteActionsSheet(
       >
         <VStack center>
           <Icon
-            onPress={handleDeleteNote}
+            onPress={handleConfirm}
             color={GlobalStyles.colors.red}
             size={28}
             name="delete-outline"
           />
-          <Text variant="caption">Delete</Text>
+          <Text color={GlobalStyles.colors.red} variant="caption">
+            Delete
+          </Text>
         </VStack>
         <VStack center>
           <Icon
             onPress={handleToggleFavorite}
-            color={GlobalStyles.colors.accent}
+            color={GlobalStyles.colors.black}
             size={28}
             name="star-outline"
           />
-          <Text variant="caption">Favourite</Text>
+          <Text color={GlobalStyles.colors.black} variant="caption">
+            Favourite
+          </Text>
         </VStack>
         <VStack center>
           <Icon
@@ -87,11 +107,13 @@ function NoteActionsSheet(
               navigation.navigate(Routes.NoteEditor, item);
               closeDrawer();
             }}
-            color={GlobalStyles.colors.black}
+            color={GlobalStyles.colors.accent}
             size={28}
             name="pencil-outline"
           />
-          <Text variant="caption">Edit</Text>
+          <Text color={GlobalStyles.colors.accent} variant="caption">
+            Edit
+          </Text>
         </VStack>
       </HStack>
     </ActionSheet>

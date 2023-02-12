@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { View, Image, StyleSheet } from "react-native";
-import { Text, Flex, AppBar } from "@react-native-material/core";
+import { Text, Flex } from "@react-native-material/core";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { Routes } from "../constants";
 import SearchBar from "react-native-dynamic-search-bar";
@@ -17,7 +17,6 @@ function NotesList({ navigation }) {
   const notes = useAppSelector(notesSelector);
   const searchQuery = useAppSelector(searchQuerySelector);
   const isFetching = useAppSelector((state) => state.isFetching);
-  const [openSearch, setSearchOpen] = useState(false);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -63,35 +62,27 @@ function NotesList({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <AppBar
-        color="white"
-        elevation={0}
-        trailing={(props) =>
-          !openSearch ? (
-            <Icon
-              onPress={() => setSearchOpen(true)}
-              name="magnify"
-              {...props}
-            />
-          ) : (
-            <SearchBar
-              value={searchQuery}
-              placeholder="Search notes ..."
-              onChangeText={handleSearchQuery}
-              onClearPress={() => dispatch(setSearchQuery(""))}
-              onSearchPress={() => {
-                setSearchOpen(false);
-                dispatch(setSearchQuery(""));
-              }}
-              searchIconComponent={<Icon size={24} name="magnify" />}
-              style={{
-                backgroundColor: colors.lightGrey,
-                width: "100%",
-              }}
-            />
-          )
-        }
-      />
+      <View style={styles.searchbarContainer}>
+        <SearchBar
+          value={searchQuery}
+          placeholder="Search notes ..."
+          onChangeText={handleSearchQuery}
+          onClearPress={() => dispatch(setSearchQuery(""))}
+          onSearchPress={() => {
+            dispatch(setSearchQuery(""));
+          }}
+          searchIconComponent={<Icon size={24} name="magnify" />}
+          placeholderTextColor={GlobalStyles.colors.darkKey}
+          textInputStyle={{
+            fontFamily: "nunito",
+          }}
+          style={{
+            backgroundColor: colors.lightGrey,
+            width: "100%",
+            height: 50,
+          }}
+        />
+      </View>
       <Tabs />
       {renderFabButton()}
     </View>
@@ -104,20 +95,10 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     backgroundColor: GlobalStyles.colors.white,
   },
-  tile: {
-    position: "relative",
-    paddingVertical: 10,
-    paddingHorizontal: 6,
-    margin: 4,
-    flex: 1,
-    height: 230,
-    overflow: "hidden",
-    borderRadius: 8,
-  },
-  favoriteBtn: {
-    position: "absolute",
-    top: 10,
-    right: 8,
+  searchbarContainer: {
+    height: 60,
+    paddingHorizontal: 30,
+    justifyContent: "center",
   },
 });
 

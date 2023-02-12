@@ -3,11 +3,13 @@ import {
   View,
   StyleSheet,
   TouchableWithoutFeedback,
+  Image,
 } from "react-native";
-import { Text } from "@react-native-material/core";
+import { Flex, Text } from "@react-native-material/core";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { SheetManager } from "react-native-actions-sheet";
 import { updateNote } from "../store/notes-thunks";
+import { setSelectItem } from "../store/notes-reducer";
 import { GlobalStyles, Routes } from "../constants";
 import { filteredFavoriteNotes, filteredNotes } from "../store/notes-selectors";
 import { useAppDispatch, useAppSelector } from "../store";
@@ -15,6 +17,7 @@ import { setSearchQuery } from "../store/notes-reducer";
 
 function NotesList({ navigation, route }) {
   const notes = useAppSelector(filteredNotes);
+  const selected = useAppSelector((state) => state.selectedNote);
   const favoriteNotes = useAppSelector(filteredFavoriteNotes);
   const data = route.name === "All" ? notes : favoriteNotes;
   const dispatch = useAppDispatch();
@@ -26,6 +29,7 @@ function NotesList({ navigation, route }) {
   }
 
   function closeBottomSheetDrawer() {
+    dispatch(setSelectItem(null));
     SheetManager.hide("note-actions-sheet");
   }
 
@@ -37,14 +41,21 @@ function NotesList({ navigation, route }) {
 
   function renderItem({ item }: { item: NoteDTO }) {
     const isFavorite = item.isFavorite;
+    const isSelected = item.id === selected;
     return (
       <TouchableWithoutFeedback
-        onLongPress={() => openNoteActionsBottomDrawer(item)}
+        onLongPress={() => {
+          openNoteActionsBottomDrawer(item);
+          dispatch(setSelectItem(item.id));
+        }}
         onPress={() => handleOpenNote(item)}
       >
         <View
           style={[
             styles.tile,
+            isSelected
+              ? { borderWidth: 1, borderColor: GlobalStyles.colors.black }
+              : undefined,
             {
               backgroundColor: item.color || GlobalStyles.colors.lightGrey,
               shadowColor: item.color,
@@ -53,7 +64,7 @@ function NotesList({ navigation, route }) {
         >
           <View style={styles.favoriteBtn}>
             <Icon
-              color={GlobalStyles.colors.accent}
+              color={GlobalStyles.colors.black}
               size={18}
               name={isFavorite ? "star-outline" : undefined}
             />
@@ -64,12 +75,15 @@ function NotesList({ navigation, route }) {
               style={{
                 marginBottom: 2,
                 width: "90%",
-                fontWeight: "400",
+                fontFamily: "nunito",
+                fontWeight: "bold",
               }}
             >
               {item.title}
             </Text>
-            <Text style={{ fontSize: 14 }}>{item.note}</Text>
+            <Text style={{ fontSize: 14, fontFamily: "nunito" }}>
+              {item.note}
+            </Text>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -78,9 +92,9 @@ function NotesList({ navigation, route }) {
 
   if (data.length === 0) {
     return (
-      <View style={styles.container}>
-        <Text>no notes found..</Text>
-      </View>
+      <Flex fill style={{ backgroundColor: GlobalStyles.colors.white }} center>
+        <Image source={require("../assets/oops.png")} />
+      </Flex>
     );
   }
 
@@ -100,7 +114,8 @@ function NotesList({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 10,
+    paddingTop: 5,
+    paddingHorizontal: 8,
     backgroundColor: GlobalStyles.colors.white,
   },
   tile: {
@@ -109,7 +124,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     margin: 4,
     flex: 1,
-    maxWidth: "50%",
+    width: "50%",
     maxHeight: 200,
     overflow: "hidden",
     borderRadius: 10,
@@ -119,7 +134,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.22,
     shadowRadius: 2,
-    elevation: 6,
+    elevation: 2,
   },
   favoriteBtn: {
     position: "absolute",
