@@ -40,8 +40,8 @@ function ConfirmSheet(props: SheetProps<{ message: string }>) {
         </Text>
         <HStack justify="between" m={12} spacing={45}>
           <Button
-            variant="secondary"
-            label="Yes, please!"
+            variant="primary"
+            label="Hell, no!"
             action={() =>
               SheetManager.hide(props.sheetId, {
                 payload: false,
@@ -49,8 +49,8 @@ function ConfirmSheet(props: SheetProps<{ message: string }>) {
             }
           />
           <Button
-            variant="primary"
-            label="Hell, no!"
+            variant="secondary"
+            label="Yes, please!"
             action={() =>
               SheetManager.hide(props.sheetId, {
                 payload: true,
