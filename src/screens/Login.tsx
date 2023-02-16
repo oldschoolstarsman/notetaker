@@ -1,11 +1,11 @@
 import { useState } from "react";
-import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { Pressable, StyleSheet, TextInput, Text, View } from "react-native";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { GlobalStyles, Routes } from "../constants";
 import { VStack } from "@react-native-material/core";
 import { HelperText } from "react-native-paper";
 import { validateEmail } from "../utils/helpers";
+import Button from "../components/Button";
 
 const auth = getAuth();
 
@@ -65,30 +65,11 @@ function LoginScreen({ navigation }) {
         <HelperText type="error" visible={true}>
           {value.error}
         </HelperText>
+        <Button action={login} variant="primary" label="Sign in" />
         <Pressable
-          pressEffect="none"
-          style={{
-            alignItems: "center",
-            width: 150,
-            paddingHorizontal: 16,
-            paddingVertical: 12,
-            borderRadius: 16,
-            backgroundColor: GlobalStyles.colors.lighterDark,
-            borderColor: GlobalStyles.colors.lighterDark,
-            borderWidth: 0.5,
-            shadowOffset: {
-              width: 0,
-              height: 9,
-            },
-            shadowOpacity: 0.22,
-            shadowRadius: 1,
-            elevation: 3,
-          }}
-          onPress={login}
+          style={{ marginTop: 12 }}
+          onPress={() => navigation.navigate(Routes.SignUp)}
         >
-          <Text style={styles.buttonText}>Log me in!</Text>
-        </Pressable>
-        <Pressable onPress={() => navigation.navigate(Routes.SignUp)}>
           <Text style={{ textDecorationLine: "underline" }}>
             I don't have an account yet, sign up now
           </Text>

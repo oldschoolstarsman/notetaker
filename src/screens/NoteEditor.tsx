@@ -1,12 +1,13 @@
 import { StyleSheet, KeyboardAvoidingView, TextInput } from "react-native";
 import { useState } from "react";
-import { HStack, Text, Pressable, VStack } from "@react-native-material/core";
+import { HStack, VStack } from "@react-native-material/core";
 import { GlobalStyles, Routes } from "../constants";
 import { createNote, updateNote } from "../store/notes-thunks";
 import { useAppDispatch } from "../store";
 import FadeElement from "../components/FadeComponent";
 import { NoteDTO, RootStackParamList } from "../types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import Button from "../components/Button";
 
 type NoteEditorProps = NativeStackScreenProps<RootStackParamList, "NoteEditor">;
 
@@ -61,68 +62,20 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
             multiline
             onChangeText={(text) => setNote(text)}
           />
-          <HStack m={12} spacing={45} justify="center">
+          <HStack justify="between" m={12} spacing={45}>
             {!isNewNote && (
-              <Pressable
-                pressEffect="none"
-                style={{
-                  alignItems: "center",
-                  width: 150,
-                  paddingHorizontal: 16,
-                  paddingVertical: 12,
-                  borderRadius: 16,
-                  backgroundColor: GlobalStyles.colors.yellow,
-                  borderColor: GlobalStyles.colors.lighterDark,
-                  borderWidth: 0.5,
-                  shadowOffset: {
-                    width: 0,
-                    height: 9,
-                  },
-                  shadowOpacity: 0.22,
-                  shadowRadius: 1,
-                  elevation: 3,
-                }}
-                onPress={handleCancel}
-              >
-                <Text style={{ fontWeight: "bold", fontFamily: "nunito" }}>
-                  Cancel
-                </Text>
-              </Pressable>
+              <Button
+                action={handleCancel}
+                variant="secondary"
+                label="Cancel"
+              />
             )}
-            <Pressable
-              pressEffect="none"
-              style={{
-                alignItems: "center",
-                width: 150,
-                paddingHorizontal: 16,
-                paddingVertical: 12,
-                borderRadius: 16,
-                backgroundColor: GlobalStyles.colors.lighterDark,
-                borderColor: GlobalStyles.colors.lighterDark,
-                borderWidth: 0.5,
-                shadowOffset: {
-                  width: 0,
-                  height: 9,
-                },
-                shadowOpacity: 0.22,
-                shadowRadius: 1,
-                elevation: 3,
-              }}
+            <Button
               disabled={!isNoteComplete}
-              onPress={handleSaveNote}
-            >
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  fontFamily: "nunito",
-                  color: isNoteComplete
-                    ? GlobalStyles.colors.white
-                    : GlobalStyles.colors.darkGrey,
-                }}
-              >
-                Save
-              </Text>
-            </Pressable>
+              action={handleSaveNote}
+              variant="primary"
+              label="Save"
+            />
           </HStack>
         </VStack>
       </KeyboardAvoidingView>
@@ -143,14 +96,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     backgroundColor: "rgb(247, 249, 250)",
     fontFamily: "nunito",
-  },
-  button: {
-    padding: 12,
-    borderRadius: 4,
-  },
-  buttonText: {
-    fontWeight: "600",
-    textAlign: "center",
   },
 });
 

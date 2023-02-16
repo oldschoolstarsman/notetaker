@@ -5,6 +5,7 @@ import { GlobalStyles, Routes } from "../constants";
 import { VStack } from "@react-native-material/core";
 import { HelperText } from "react-native-paper";
 import { validateEmail } from "../utils/helpers";
+import Button from "../components/Button";
 
 const auth = getAuth();
 
@@ -72,29 +73,7 @@ function SignUpScreen({ navigation }) {
         <HelperText type="error" visible={Boolean(value.error)}>
           {value.error}
         </HelperText>
-        <Pressable
-          pressEffect="none"
-          style={{
-            alignItems: "center",
-            width: 150,
-            paddingHorizontal: 16,
-            paddingVertical: 12,
-            borderRadius: 16,
-            backgroundColor: GlobalStyles.colors.lighterDark,
-            borderColor: GlobalStyles.colors.lighterDark,
-            borderWidth: 0.5,
-            shadowOffset: {
-              width: 0,
-              height: 9,
-            },
-            shadowOpacity: 0.22,
-            shadowRadius: 1,
-            elevation: 3,
-          }}
-          onPress={handleSignUp}
-        >
-          <Text style={styles.buttonText}>Sign me up!</Text>
-        </Pressable>
+        <Button label="Register" action={handleSignUp} variant="primary" />
         <Pressable onPress={() => navigation.navigate(Routes.LogIn)}>
           <Text style={{ textDecorationLine: "underline" }}>
             I already have an account, go back to login screen
