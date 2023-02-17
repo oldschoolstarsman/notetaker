@@ -10,7 +10,7 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { SheetManager } from "react-native-actions-sheet";
 import { updateNote } from "../store/notes-thunks";
 import { setSelectItem } from "../store/notes-reducer";
-import { GlobalStyles, Routes } from "../constants";
+import { darkerBackgrounds, GlobalStyles, Routes } from "../constants";
 import { filteredFavoriteNotes, filteredNotes } from "../store/notes-selectors";
 import { useAppDispatch, useAppSelector } from "../store";
 import { setSearchQuery } from "../store/notes-reducer";
@@ -46,6 +46,11 @@ function NotesList({ navigation, route }) {
   function renderItem({ item }: { item: NoteDTO }) {
     const isFavorite = item.isFavorite;
     const isSelected = item.id === selected;
+    const isDarkBackground = darkerBackgrounds.includes(item.color);
+    const textColor = isDarkBackground
+      ? GlobalStyles.colors.white
+      : GlobalStyles.colors.lighterDark;
+
     return (
       <TouchableWithoutFeedback
         style={{ flex: 1 }}
@@ -65,7 +70,7 @@ function NotesList({ navigation, route }) {
                 }
               : undefined,
             {
-              backgroundColor: item.color || GlobalStyles.colors.lightGrey,
+              backgroundColor: item.color || GlobalStyles.colors.yellow,
               shadowColor: item.color,
             },
           ]}
@@ -86,11 +91,18 @@ function NotesList({ navigation, route }) {
                 width: "90%",
                 fontFamily: "nunito",
                 fontWeight: "bold",
+                color: textColor,
               }}
             >
               {item.title}
             </Text>
-            <Text style={{ fontSize: 14, fontFamily: "nunito" }}>
+            <Text
+              style={{
+                fontSize: 14,
+                fontFamily: "nunito",
+                color: textColor,
+              }}
+            >
               {item.note}
             </Text>
           </View>

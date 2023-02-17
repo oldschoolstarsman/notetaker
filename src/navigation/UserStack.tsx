@@ -1,4 +1,3 @@
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { GlobalStyles, Routes } from "../constants";
 import NoteEditor from "../screens/NoteEditor";

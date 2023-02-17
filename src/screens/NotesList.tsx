@@ -1,6 +1,12 @@
 import { useEffect } from "react";
 import { View, Image, StyleSheet } from "react-native";
-import { Text, Flex, Avatar, HStack } from "@react-native-material/core";
+import {
+  Text,
+  Flex,
+  Avatar,
+  HStack,
+  VStack,
+} from "@react-native-material/core";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { Routes } from "../constants";
 import SearchBar from "react-native-dynamic-search-bar";
@@ -44,10 +50,12 @@ const NotesList: React.FC<NotesListProps> = ({ navigation }) => {
 
   if (isFetching) {
     return (
-      <ActivityIndicator
-        animating={true}
-        color={GlobalStyles.colors.darkGrey}
-      />
+      <VStack fill center>
+        <ActivityIndicator
+          animating={true}
+          color={GlobalStyles.colors.darkGrey}
+        />
+      </VStack>
     );
   }
 

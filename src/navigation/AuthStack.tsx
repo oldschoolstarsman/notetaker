@@ -1,4 +1,3 @@
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import LoginScreen from "../screens/Login";
 import SignUpScreen from "../screens/SignUp";
@@ -14,7 +13,6 @@ function AuthStack() {
         headerShown: false,
       }}
     >
-      {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
       <Stack.Screen name={Routes.LogIn} component={LoginScreen} />
       <Stack.Screen name={Routes.SignUp} component={SignUpScreen} />
     </Stack.Navigator>

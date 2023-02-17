@@ -24,12 +24,20 @@ const GlobalStyles = {
   },
 };
 
+const darkerBackgrounds = [GlobalStyles.colors.accent];
+
 const ColorPickerColors = [
   GlobalStyles.colors.accent,
   GlobalStyles.colors.orange,
   GlobalStyles.colors.lightPurple,
+  GlobalStyles.colors.yellow,
   GlobalStyles.colors.lightGreen,
-  GlobalStyles.colors.lightGrey,
 ];
 
-export { Routes, GlobalStyles, ColorPickerColors, NavigationTabs };
+export {
+  Routes,
+  GlobalStyles,
+  ColorPickerColors,
+  NavigationTabs,
+  darkerBackgrounds,
+};
