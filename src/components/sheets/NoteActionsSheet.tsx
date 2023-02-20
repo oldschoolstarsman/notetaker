@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { HStack } from "@react-native-material/core";
+import { HStack} from "@react-native-material/core";
 import ActionSheet, {
   ActionSheetRef,
   SheetManager,
@@ -9,20 +9,21 @@ import { GlobalStyles, Routes } from "../../constants";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { removeNote, updateNote } from "../../store/notes-thunks";
-import { useAppDispatch } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 import { View } from "react-native";
 import ColorPicker from "../ColorPicker";
 import RNBounceable from "@freakycoder/react-native-bounceable";
 import FadeElement from "../FadeComponent";
 import { NoteDTO } from "../../types";
+import { getSelectedNote } from "../../store/notes-selectors";
 
 function NoteActionsSheet(
-  props: SheetProps<{ item: NoteDTO; updateNote: () => void }>
+  props: SheetProps<{ updateNote: () => void }>
 ) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
-  const item = props.payload?.item;
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
+  const selectedNote = useAppSelector(getSelectedNote);
 
   function closeDrawer() {
     SheetManager.hide(props.sheetId);
@@ -41,12 +42,12 @@ function NoteActionsSheet(
   }
 
   function handleDeleteNote() {
-    dispatch(removeNote(item.id));
+    dispatch(removeNote(selectedNote.id));
     closeDrawer();
   }
 
   function handleToggleFavorite() {
-    dispatch(updateNote({ ...item, isFavorite: !item.isFavorite }));
+    dispatch(updateNote({ ...selectedNote, isFavorite: !selectedNote.isFavorite }));
   }
 
   return (
@@ -63,7 +64,7 @@ function NoteActionsSheet(
       }}
     >
       <FadeElement duration={500} visible={true}>
-        <ColorPicker note={item} />
+        <ColorPicker note={selectedNote} />
         <View
           style={{
             height: 5,
@@ -123,7 +124,7 @@ function NoteActionsSheet(
           >
             <Icon
               onPress={() => {
-                navigation.navigate(Routes.NoteEditor, item);
+                navigation.navigate(Routes.NoteEditor, selectedNote);
                 closeDrawer();
               }}
               color={GlobalStyles.colors.lightGreen}

@@ -19,7 +19,7 @@ export const noteSlice = createSlice({
     setSearchQuery: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
     },
-    setSelectItem: (state, action: PayloadAction<string>) => {
+    setSelectItem: (state, action: PayloadAction<NoteDTO>) => {
       state.selectedNote = action.payload;
     },
   },
@@ -75,6 +75,7 @@ export const noteSlice = createSlice({
         updateNote.fulfilled,
         (state, action: PayloadAction<NoteDTO>) => {
           state.isLoading = false;
+          state.selectedNote = action.payload;
           const newList = state.notes.map((note: NoteDTO) => {
             if (note.id === action.payload.id) {
               return action.payload;

@@ -11,7 +11,7 @@ import { SheetManager } from "react-native-actions-sheet";
 import { updateNote } from "../store/notes-thunks";
 import { setSelectItem } from "../store/notes-reducer";
 import { darkerBackgrounds, GlobalStyles, Routes } from "../constants";
-import { filteredFavoriteNotes, filteredNotes } from "../store/notes-selectors";
+import { filteredFavoriteNotes, filteredNotes, getSelectedNote } from "../store/notes-selectors";
 import { useAppDispatch, useAppSelector } from "../store";
 import { setSearchQuery } from "../store/notes-reducer";
 import FadeElement from "./FadeComponent";
@@ -19,15 +19,15 @@ import { NoteDTO } from "../types";
 
 function NotesList({ navigation, route }) {
   const notes = useAppSelector(filteredNotes);
-  const selected = useAppSelector((state) => state.selectedNote);
+  const selectedNote = useAppSelector(getSelectedNote);
   const searchQuery = useAppSelector((state) => state.searchQuery);
   const favoriteNotes = useAppSelector(filteredFavoriteNotes);
   const data = route.name === "All" ? notes : favoriteNotes;
   const dispatch = useAppDispatch();
 
-  function openNoteActionsBottomDrawer(item: NoteDTO) {
+  function openNoteActionsBottomDrawer() {
     SheetManager.show("note-actions-sheet", {
-      payload: { item, setColor: () => updateNote(item) },
+      payload: { setColor: () => updateNote(selectedNote) },
       onClose: () => dispatch(setSelectItem(null)),
     });
   }
@@ -38,14 +38,14 @@ function NotesList({ navigation, route }) {
   }
 
   function handleOpenNote(item) {
-    navigation.navigate(Routes.NoteEditor, item);
+    navigation.navigate(Routes.NoteEditor, selectedNote);
     closeBottomSheetDrawer();
     dispatch(setSearchQuery(""));
   }
 
   function renderItem({ item }: { item: NoteDTO }) {
     const isFavorite = item.isFavorite;
-    const isSelected = item.id === selected;
+    const isSelected = item.id === selectedNote;
     const isDarkBackground = darkerBackgrounds.includes(item.color);
     const textColor = isDarkBackground
       ? GlobalStyles.colors.white
@@ -55,8 +55,8 @@ function NotesList({ navigation, route }) {
       <TouchableWithoutFeedback
         style={{ flex: 1 }}
         onLongPress={() => {
-          openNoteActionsBottomDrawer(item);
-          dispatch(setSelectItem(item.id));
+          dispatch(setSelectItem(item));
+          openNoteActionsBottomDrawer();
         }}
         onPress={() => handleOpenNote(item)}
       >

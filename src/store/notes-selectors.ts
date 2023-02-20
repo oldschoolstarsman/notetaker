@@ -8,6 +8,8 @@ export const favoritesNotesSelector = createSelector(notesSelector, (notes) =>
   notes.filter((note) => note.isFavorite)
 );
 
+export const getSelectedNote = (state: NotesState) => state.selectedNote;
+
 export const searchQuerySelector = (state: NotesState) => state.searchQuery;
 
 const queryMatch = (notes: NoteDTO[], searchQuery: NotesState["searchQuery"]) =>
