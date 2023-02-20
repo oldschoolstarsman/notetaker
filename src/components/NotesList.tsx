@@ -38,7 +38,7 @@ function NotesList({ navigation, route }) {
   }
 
   function handleOpenNote(item) {
-    navigation.navigate(Routes.NoteEditor, selectedNote);
+    navigation.navigate(Routes.NoteEditor, item);
     closeBottomSheetDrawer();
     dispatch(setSearchQuery(""));
   }
