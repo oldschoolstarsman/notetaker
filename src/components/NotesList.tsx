@@ -11,7 +11,11 @@ import { SheetManager } from "react-native-actions-sheet";
 import { updateNote } from "../store/notes-thunks";
 import { setSelectItem } from "../store/notes-reducer";
 import { darkerBackgrounds, GlobalStyles, Routes } from "../constants";
-import { filteredFavoriteNotes, filteredNotes, getSelectedNote } from "../store/notes-selectors";
+import {
+  filteredFavoriteNotes,
+  filteredNotes,
+  getSelectedNote,
+} from "../store/notes-selectors";
 import { useAppDispatch, useAppSelector } from "../store";
 import { setSearchQuery } from "../store/notes-reducer";
 import FadeElement from "./FadeComponent";
@@ -45,7 +49,7 @@ function NotesList({ navigation, route }) {
 
   function renderItem({ item }: { item: NoteDTO }) {
     const isFavorite = item.isFavorite;
-    const isSelected = item.id === selectedNote;
+    const isSelected = selectedNote && item.id === selectedNote.id;
     const isDarkBackground = darkerBackgrounds.includes(item.color);
     const textColor = isDarkBackground
       ? GlobalStyles.colors.white

@@ -10,7 +10,7 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { createNote, removeNote, updateNote } from "../../store/notes-thunks";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import ColorPicker from "../ColorPicker";
 import RNBounceable from "@freakycoder/react-native-bounceable";
 import FadeElement from "../FadeComponent";
@@ -89,65 +89,37 @@ function NoteActionsSheet(props: SheetProps<{ updateNote: () => void }>) {
             marginHorizontal: 20,
           }}
         >
-          <RNBounceable
-            style={{
-              width: 50,
-              height: 50,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <RNBounceable style={styles.button}>
             <Icon
               onPress={handleConfirm}
-              color={GlobalStyles.colors.lightGreen}
+              style={styles.icon}
               size={28}
               name="delete-outline"
             />
           </RNBounceable>
-          <RNBounceable
-            style={{
-              width: 50,
-              height: 50,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <RNBounceable style={styles.button}>
             <Icon
               onPress={handleToggleFavorite}
-              color={GlobalStyles.colors.lightGreen}
+              style={styles.icon}
               size={28}
               name="star-outline"
             />
           </RNBounceable>
-          <RNBounceable
-            style={{
-              width: 50,
-              height: 50,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <RNBounceable style={styles.button}>
             <Icon
               onPress={() => {
                 navigation.navigate(Routes.NoteEditor, selectedNote);
                 closeDrawer();
               }}
-              color={GlobalStyles.colors.lightGreen}
+              style={styles.icon}
               size={28}
               name="pencil-outline"
             />
           </RNBounceable>
-          <RNBounceable
-            style={{
-              width: 50,
-              height: 50,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <RNBounceable style={styles.button}>
             <Icon
               onPress={handleDuplicate}
-              color={GlobalStyles.colors.lightGreen}
+              style={styles.icon}
               size={28}
               name="content-duplicate"
             />
@@ -157,5 +129,17 @@ function NoteActionsSheet(props: SheetProps<{ updateNote: () => void }>) {
     </ActionSheet>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    width: 50,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  icon: {
+    color: GlobalStyles.colors.lightGreen,
+  },
+});
 
 export default NoteActionsSheet;
