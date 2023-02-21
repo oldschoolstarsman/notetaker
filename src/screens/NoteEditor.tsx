@@ -62,7 +62,11 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ navigation, route }) => {
             multiline
             onChangeText={(text) => setNote(text)}
           />
-          <HStack justify="between" m={12} spacing={45}>
+          <HStack
+            justify={isNewNote ? "center" : "between"}
+            m={12}
+            spacing={45}
+          >
             {!isNewNote && (
               <Button
                 action={handleCancel}
