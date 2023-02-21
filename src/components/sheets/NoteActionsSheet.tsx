@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { HStack} from "@react-native-material/core";
+import { HStack } from "@react-native-material/core";
 import ActionSheet, {
   ActionSheetRef,
   SheetManager,
@@ -8,18 +8,15 @@ import ActionSheet, {
 import { GlobalStyles, Routes } from "../../constants";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
-import { removeNote, updateNote } from "../../store/notes-thunks";
+import { createNote, removeNote, updateNote } from "../../store/notes-thunks";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { View } from "react-native";
 import ColorPicker from "../ColorPicker";
 import RNBounceable from "@freakycoder/react-native-bounceable";
 import FadeElement from "../FadeComponent";
-import { NoteDTO } from "../../types";
 import { getSelectedNote } from "../../store/notes-selectors";
 
-function NoteActionsSheet(
-  props: SheetProps<{ updateNote: () => void }>
-) {
+function NoteActionsSheet(props: SheetProps<{ updateNote: () => void }>) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
@@ -47,7 +44,15 @@ function NoteActionsSheet(
   }
 
   function handleToggleFavorite() {
-    dispatch(updateNote({ ...selectedNote, isFavorite: !selectedNote.isFavorite }));
+    dispatch(
+      updateNote({ ...selectedNote, isFavorite: !selectedNote.isFavorite })
+    );
+  }
+
+  function handleDuplicate() {
+    const copy = { ...selectedNote };
+    delete copy.id;
+    dispatch(createNote(copy));
   }
 
   return (
@@ -130,6 +135,21 @@ function NoteActionsSheet(
               color={GlobalStyles.colors.lightGreen}
               size={28}
               name="pencil-outline"
+            />
+          </RNBounceable>
+          <RNBounceable
+            style={{
+              width: 50,
+              height: 50,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Icon
+              onPress={handleDuplicate}
+              color={GlobalStyles.colors.lightGreen}
+              size={28}
+              name="content-duplicate"
             />
           </RNBounceable>
         </HStack>
