@@ -69,7 +69,6 @@ function NotesList({ navigation, route }) {
             styles.tile,
             isSelected
               ? {
-                  borderWidth: 1,
                   borderColor: GlobalStyles.colors.lighterDark,
                 }
               : undefined,
@@ -79,14 +78,13 @@ function NotesList({ navigation, route }) {
             },
           ]}
         >
-          <FadeElement visible={isFavorite} style={styles.favoriteBtn}>
+          <FadeElement visible={true} style={styles.favoriteBtn}>
             <Icon
               color={GlobalStyles.colors.lighterDark}
               size={18}
               name={isFavorite ? "star-outline" : undefined}
             />
           </FadeElement>
-
           <View style={{ padding: 5 }}>
             <Text
               numberOfLines={1}
@@ -145,6 +143,8 @@ const styles = StyleSheet.create({
   },
   tile: {
     position: "relative",
+    borderWidth: 1,
+    borderColor: "transparent",
     paddingVertical: 10,
     paddingHorizontal: 6,
     margin: 4,
