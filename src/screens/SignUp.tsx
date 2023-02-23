@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Pressable, StyleSheet, TextInput, Text, View } from "react-native";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { GlobalStyles, Routes } from "../constants";
 import { VStack } from "@react-native-material/core";
 import { HelperText } from "react-native-paper";
 import { validateEmail } from "../utils/helpers";
 import Button from "../components/Button";
-
-const auth = getAuth();
+import { auth } from "../config/firebase-config";
 
 function SignUpScreen({ navigation }) {
   const [value, setValue] = useState({
