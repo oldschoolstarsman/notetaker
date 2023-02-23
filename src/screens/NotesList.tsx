@@ -21,8 +21,9 @@ import FadeElement from "../components/FadeComponent";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
 import RNBounceable from "@freakycoder/react-native-bounceable";
-import { getAuth, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { ActivityIndicator } from "react-native-paper";
+import { auth } from "../config/firebase-config";
 
 type NotesListProps = NativeStackScreenProps<RootStackParamList, "NotesList">;
 
@@ -33,7 +34,6 @@ const NotesList: React.FC<NotesListProps> = ({ navigation }) => {
   const isFetching = useAppSelector((state) => state.isFetching);
   const isLoading = useAppSelector((state) => state.isLoading);
   const dispatch = useAppDispatch();
-  const auth = getAuth();
 
   useEffect(() => {
     dispatch(fetchNotes());
