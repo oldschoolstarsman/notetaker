@@ -5,16 +5,16 @@ import {
   initializeAuth,
   getReactNativePersistence,
 } from "firebase/auth/react-native";
+import Constants from "expo-constants";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB8GOKBW5Rm_xmjvoTrhnqlKMNJgS3fFB0",
-  authDomain: "mynotesrn.firebaseapp.com",
-  databaseURL:
-    "https://mynotesrn-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "mynotesrn",
-  storageBucket: "mynotesrn.appspot.com",
-  messagingSenderId: "914336823878",
-  appId: "1:914336823878:web:d07b2dfd3bcbe3684aa847",
+  apiKey: Constants.manifest?.extra?.firebaseApiKey,
+  databaseURL: Constants.manifest?.extra?.databaseURL,
+  authDomain: Constants.manifest?.extra?.firebaseAuthDomain,
+  projectId: Constants.manifest?.extra?.firebaseProjectId,
+  storageBucket: Constants.manifest?.extra?.firebaseStorageBucket,
+  messagingSenderId: Constants.manifest?.extra?.firebaseMessagingSenderId,
+  appId: Constants.manifest?.extra?.firebaseAppId,
 };
 
 const app = initializeApp(firebaseConfig);
