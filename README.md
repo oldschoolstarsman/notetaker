@@ -1,7 +1,7 @@
 # NOTETAKER
 
 This project was created with React Native and Expo. It allows user to create an account and sign in. Once user is signed, he/she will be able to create some notes.
-Each note is reprensented as a tile and can be edited, added to favorites or deleted.
+Each note is reprensented as a tile and can be edited, added to favorites, duplicated or deleted.
 By a long press on a note, user can see some actions: delete, add to favorite and edit
 
 Project is using firebase auth and realtime database to store the notes. 
