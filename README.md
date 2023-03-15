@@ -1,10 +1,20 @@
 # NOTETAKER
 
-This project was created with React Native and Expo. It allows user to create an account and sign in. Once user is signed, he/she will be able to create some notes.
+This project was created with React Native and Expo in order to learn the basics of React Native.
+
+It allows user to create an account and sign in. Once user is signed, he/she will be able to create some notes.
 Each note is reprensented as a tile and can be edited, added to favorites, duplicated or deleted.
 By a long press on a note, user can see some actions: delete, add to favorite and edit
 
-Project is using firebase auth and realtime database to store the notes. 
+Project is using firebase auth and realtime database to store the notes.
+
+Stack:
+  - React native
+  - Typescript
+  - React Native Material
+  - Redux / RTK
+  - Redux persist
+  - Firebase (basic implementation)
 
 <div align="center">
   <div style="display: flex; align-items: flex-start;">
